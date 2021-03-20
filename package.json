@@ -1,0 +1,12 @@
+{
+  "name": "gameofyear",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "watch": "tsc -w"
+  },
+  "author": "Slowmoney, Komap",
+  "license": "ISC"
+}

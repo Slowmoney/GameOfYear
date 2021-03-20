@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "target": "ES2020",
+        "module": "ES2020",
+        "sourceMap": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "experimentalDecorators": true,
+        "allowJs": false,
+        "allowUnreachableCode": false,
+        "alwaysStrict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noUnusedParameters": true,
+        "strictNullChecks": false,
+        "outDir": "./dist",
+    },
+    "include": ["./src/**/*.ts"],
+    "exclude": ["node_modules", "dist", "webpack.config.js"]
+}
