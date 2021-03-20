@@ -3,14 +3,9 @@ import { IAnimated, IContainer, IElement, IEngine } from '../types';
 import vec2 from '../utils/vec2.js';
 import Sprite from './Sprite.js';
 
-export default class Card extends Entity implements IElement, IContainer, IAnimated
+export default class Card extends Entity implements IElement, IAnimated
 {
-    width: number;
-    height: number;
-    engine: IEngine;
-    offset: vec2 = new vec2(0, 0);
     hide: boolean = false;
-    pos: vec2 = new vec2(0, 0);
     backGround: Sprite;
     time: number = 0;
     duration: number = 100;
@@ -40,7 +35,7 @@ export default class Card extends Entity implements IElement, IContainer, IAnima
             //health circle stat
             const radius = 10
 
-            const healthPos = new vec2(this.x + this.offset.x + this.width - radius / 2, this.y + this.offset.y + this.height - radius)
+            const healthPos = new vec2(this.x +  this.width - radius / 2, this.y + this.height - radius)
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#f44336"
             this.engine.ctx.arc(healthPos.x, healthPos.y, radius, 0, 2 * Math.PI);
@@ -50,7 +45,7 @@ export default class Card extends Entity implements IElement, IContainer, IAnima
             this.engine.ctx.fillText(this.health + "", healthPos.x, healthPos.y + 4)
 
             //attack circle stat
-            const attckPos = new vec2(this.x + this.offset.x + radius, this.y + this.offset.y + this.height - radius)
+            const attckPos = new vec2(this.x + radius, this.y +  this.height - radius)
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#9e9e9e"
             this.engine.ctx.arc(attckPos.x, attckPos.y, radius, 0, 2 * Math.PI);
@@ -61,7 +56,7 @@ export default class Card extends Entity implements IElement, IContainer, IAnima
             this.engine.ctx.fillText(this.attack + "", attckPos.x, attckPos.y + 4)
 
             //armor circle stat
-            const armorPos = new vec2(this.x + this.offset.x + this.width, this.y + this.offset.y+5)
+            const armorPos = new vec2(this.x + this.width, this.y + 5)
             this.engine.ctx.fillText(this.armor + "", armorPos.x, armorPos.y + 4)
 
         }
@@ -87,8 +82,8 @@ export default class Card extends Entity implements IElement, IContainer, IAnima
     }
     drawBackGround ()
     {
-        this.backGround.pos.x = this.offset.x;
-        this.backGround.pos.y = this.offset.y;
+        this.backGround.pos.x = this.x;
+        this.backGround.pos.y = this.y;
         this.backGround.draw();
     }
     loadBackGround ()

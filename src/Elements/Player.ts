@@ -3,22 +3,20 @@ import { IAnimated, IContainer, IElement, IEngine } from '../types';
 import vec2 from '../utils/vec2.js';
 import Sprite from './Sprite.js';
 
-export default class Player extends Entity implements IElement, IContainer, IAnimated
+export default class Player extends Entity implements IElement, IAnimated
 {
     width: number;
     height: number;
     engine: IEngine;
-    offset: vec2 = new vec2(0, 0);
     hide: boolean = false;
-    pos: vec2 = new vec2(0, 0);
     backGround: Sprite 
-
     time: number = 0;
     duration: number = 100;
-    counter = 0;
+    counter = 99;
     health = 0
     attack = 0
     armor = 0
+    card: Path2D= new Path2D()
     constructor(engine: IEngine, size: vec2);
     constructor(engine: IEngine, width: number | vec2, height?: number)
     {
@@ -30,20 +28,23 @@ export default class Player extends Entity implements IElement, IContainer, IAni
             this.width = width.x;
             this.height = width.y;
         }
+        //this.card.rect(this.x, this.y, this.width, this.height)
         this.loadBackGround();
+        this.engine.on('mousemove', this.mousemove.bind(this))
+        this.engine.on("click", this.click.bind(this))
     }
     draw ()
     {
         this.engine.ctx.save()
         if (!this.hide)
         {
-            this.engine.ctx.strokeRect(this.x+this.offset.x, this.y+this.offset.y, this.width, this.height)
-
+            //this.card.rect(this.x + this.offset.x, this.y + this.offset.y, this.width, this.height)
+            this.engine.ctx.stroke(this.card)
 
             //health circle stat
             const radius = 10
 
-            const healthPos = new vec2(this.x + this.offset.x + this.width - radius, this.y + this.offset.y + this.height - radius)
+            const healthPos = new vec2(this.x  + this.width - radius, this.y + this.height - radius)
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#f44336"
             this.engine.ctx.arc(healthPos.x, healthPos.y, radius, 0, 2 * Math.PI);
@@ -53,7 +54,7 @@ export default class Player extends Entity implements IElement, IContainer, IAni
             this.engine.ctx.fillText(this.counter + "", healthPos.x, healthPos.y + 4)
 
             //attack circle stat
-            const attckPos = new vec2(this.x + this.offset.x + radius, this.y + this.offset.y + this.height - radius)
+            const attckPos = new vec2(this.x +  radius, this.y +  this.height - radius)
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#9e9e9e"
             this.engine.ctx.arc(attckPos.x, attckPos.y, radius, 0, 2 * Math.PI);
@@ -64,19 +65,19 @@ export default class Player extends Entity implements IElement, IContainer, IAni
             this.engine.ctx.fillText(this.counter + "", attckPos.x, attckPos.y + 4)
 
             //armor circle stat
-            const armorPos = new vec2(this.x + this.offset.x + this.width-10, this.y + this.offset.y+10)
+            const armorPos = new vec2(this.x +  this.width-10, this.y +10)
             this.engine.ctx.fillText(this.counter + "", armorPos.x, armorPos.y)
 
             const playerSprite = Sprite.all.get('poo')
             playerSprite.draw();
 
             
-            playerSprite.pos.y = this.y + this.offset.y + 30;
+            playerSprite.pos.y = this.y + 30;
 
             playerSprite.size.x = 9*10-30
             playerSprite.size.y = playerSprite.aspecеRatio * playerSprite.size.x
             
-            playerSprite.pos.x = (this.x +this.offset.x)+(this.width-playerSprite.size.x)/2;
+            playerSprite.pos.x = (this.x )+(this.width-playerSprite.size.x)/2;
         }
         //this.engine.ctx.translate(100-(this.width/2*this.counter), 0);
         //this.engine.ctx.scale(this.counter,1);
@@ -94,17 +95,19 @@ export default class Player extends Entity implements IElement, IContainer, IAni
             this.counter += 1;
             if (this.counter >= 100)
             {
+                this.card = new Path2D()
+                this.card.rect(this.x, this.y, this.width, this.height)
                 this.counter = -1
             }
         }
     }
-    drawBackGround ()
+    protected drawBackGround ()
     {
-        this.backGround.pos.x = this.offset.x;
-        this.backGround.pos.y = this.offset.y;
+        this.backGround.pos.x = this.x;
+        this.backGround.pos.y = this.y;
         this.backGround.draw();
     }
-    loadBackGround ()
+    protected loadBackGround ()
     {
         if (!this.backGround)
         {
@@ -122,8 +125,17 @@ export default class Player extends Entity implements IElement, IContainer, IAni
             this.backGround.anim(frames, 88); */
         }
     }
-    anim (name: string, duration: number)
+    protected anim (name: string, duration: number)
     {
         console.log(name, duration);
+    }
+    protected click (e:MouseEvent)
+    {
+        if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)) this.emit('click',this)
+    }
+    protected mousemove (e:MouseEvent)
+    {
+        e;
+        //this.hide = this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)
     }
 }

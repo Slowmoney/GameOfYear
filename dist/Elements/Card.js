@@ -4,9 +4,7 @@ import Sprite from './Sprite.js';
 export default class Card extends Entity {
     constructor(engine, width, height) {
         super(engine);
-        this.offset = new vec2(0, 0);
         this.hide = false;
-        this.pos = new vec2(0, 0);
         this.time = 0;
         this.duration = 100;
         this.counter = 0;
@@ -28,7 +26,7 @@ export default class Card extends Entity {
         if (!this.hide) {
             //health circle stat
             const radius = 10;
-            const healthPos = new vec2(this.x + this.offset.x + this.width - radius / 2, this.y + this.offset.y + this.height - radius);
+            const healthPos = new vec2(this.x + this.width - radius / 2, this.y + this.height - radius);
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#f44336";
             this.engine.ctx.arc(healthPos.x, healthPos.y, radius, 0, 2 * Math.PI);
@@ -37,7 +35,7 @@ export default class Card extends Entity {
             this.engine.ctx.textAlign = "center";
             this.engine.ctx.fillText(this.health + "", healthPos.x, healthPos.y + 4);
             //attack circle stat
-            const attckPos = new vec2(this.x + this.offset.x + radius, this.y + this.offset.y + this.height - radius);
+            const attckPos = new vec2(this.x + radius, this.y + this.height - radius);
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#9e9e9e";
             this.engine.ctx.arc(attckPos.x, attckPos.y, radius, 0, 2 * Math.PI);
@@ -46,7 +44,7 @@ export default class Card extends Entity {
             this.engine.ctx.textAlign = "center";
             this.engine.ctx.fillText(this.attack + "", attckPos.x, attckPos.y + 4);
             //armor circle stat
-            const armorPos = new vec2(this.x + this.offset.x + this.width, this.y + this.offset.y + 5);
+            const armorPos = new vec2(this.x + this.width, this.y + 5);
             this.engine.ctx.fillText(this.armor + "", armorPos.x, armorPos.y + 4);
         }
         //this.engine.ctx.translate(100-(this.width/2*this.counter), 0);
@@ -66,8 +64,8 @@ export default class Card extends Entity {
         }
     }
     drawBackGround() {
-        this.backGround.pos.x = this.offset.x;
-        this.backGround.pos.y = this.offset.y;
+        this.backGround.pos.x = this.x;
+        this.backGround.pos.y = this.y;
         this.backGround.draw();
     }
     loadBackGround() {

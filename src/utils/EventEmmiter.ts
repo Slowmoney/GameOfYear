@@ -6,7 +6,7 @@ export default class EventEmmiter
     }
     emit (eventName:string,...args:any)
     {
-        if (this.#events.has(eventName))this.#events.get(eventName).forEach((l) =>l(args))
+        if (this.#events.has(eventName))this.#events.get(eventName).forEach((l) =>l.apply(this,args))
     }
 
     on (eventName: string, listener: (...args:any) => any)

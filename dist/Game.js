@@ -1,15 +1,16 @@
 import Card from './Elements/Card.js';
 import Player from './Elements/Player.js';
 import Sprite from './Elements/Sprite.js';
+import EventEmmiter from './utils/eventEmmiter.js';
 import { spriteLoader } from './utils/spriteLoader.js';
 import vec2 from './utils/vec2.js';
 import Layout from './views/Layout.js';
-export default class Game {
+export default class Game extends EventEmmiter {
     constructor(engine) {
+        super();
         this.sprites = [];
         this.spriteUrls = [];
         this.engine = engine;
-        this.engine.on("click", this.click);
         this.spriteUrls = [
             { name: 'homeBtn', url: './sprites/buttons/1598981465112.png' },
             { name: 'test', url: './sprites/test.jpg' },
@@ -43,17 +44,17 @@ export default class Game {
     }
     main() {
         const cardSize = new vec2(9 * 10, 16 * 10);
-        this.view.elements.push(new Card(this.engine, cardSize));
-        this.view.elements.push(new Card(this.engine, cardSize));
-        this.view.elements.push(new Card(this.engine, cardSize));
-        this.view.elements.push(new Player(this.engine, cardSize));
-        this.view.elements.push(new Card(this.engine, cardSize));
-        this.view.elements.push(new Card(this.engine, cardSize));
-        this.view.elements.push(new Card(this.engine, cardSize));
+        const elem = [
+            new Card(this.engine, cardSize),
+            new Card(this.engine, cardSize),
+            new Card(this.engine, cardSize),
+            new Player(this.engine, cardSize),
+            new Card(this.engine, cardSize),
+            new Card(this.engine, cardSize),
+            new Card(this.engine, cardSize),
+        ];
+        this.view.push(elem);
         this.view.update(0);
         requestAnimationFrame(this.update);
-    }
-    click(e) {
-        console.log(e, this);
     }
 }

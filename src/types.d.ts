@@ -1,24 +1,27 @@
 import Entity from './Entity.js';
+import EventEmmiter from './utils/eventEmmiter.js';
 import vec2 from "./utils/vec2.js";
 
-export interface IEngine {
+export interface IEngine extends EventEmmiter {
     el: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
 }
-export interface IMenu {
+export interface IMenu extends EventEmmiter
+{
+    push:(items: IElement[])=>number
     draw: () => void;
     update: (utime: number) => void;
     elements: IElement[];
 }
 export interface IContainer {
-    width: number;
-    height: number;
+    getWidth: () => number
+    setWidth: () => number
+    getHeight: () => number
+    setHeight: () => number
 }
-export interface IElement extends Entity, IContainer {
-    offset: vec2;
+export interface IElement extends Entity {
     draw: () => void;
     update: (utime: number) => void;
-    pos: vec2;
     setPos: (x: number, y: number) => void;
     hide: boolean;
 }

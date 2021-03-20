@@ -1,28 +1,12 @@
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
-var _events;
-export default class Engine {
+import EventEmmiter from "./utils/eventEmmiter.js";
+export default class Engine extends EventEmmiter {
     constructor(id, width, height) {
-        _events.set(this, new Map());
+        super();
         this.el = document.getElementById(id);
         this.ctx = this.el.getContext('2d');
         this.el.width = width ? width : window.innerWidth;
         this.el.height = height ? height : window.innerHeight;
-        this.el.addEventListener("click", () => this.emit("click"));
-    }
-    emit(eventName, ...args) {
-        if (__classPrivateFieldGet(this, _events).has(eventName))
-            __classPrivateFieldGet(this, _events).get(eventName).forEach((l) => l(args));
-    }
-    on(eventName, listener) {
-        if (__classPrivateFieldGet(this, _events).has(eventName))
-            __classPrivateFieldGet(this, _events).get(eventName).push(listener);
-        else
-            __classPrivateFieldGet(this, _events).set(eventName, [listener]);
+        this.el.addEventListener("click", (ev) => this.emit("click", ev));
+        this.el.addEventListener("mousemove", (ev) => this.emit("mousemove", ev));
     }
 }
-_events = new WeakMap();

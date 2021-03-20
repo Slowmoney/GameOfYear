@@ -2,8 +2,8 @@ import Entity from '../Entity.js';
 import { IContainer, IElement, IEngine } from '../types';
 import vec2 from '../utils/vec2.js';
 
-export default class Sprite extends Entity implements IElement, IContainer {
-    image: ImageBitmap | HTMLImageElement;
+export default class Sprite extends Entity implements IElement {
+    protected image: ImageBitmap | HTMLImageElement;
     offset: vec2 = new vec2(0, 0);
     hide: boolean;
     width: number;
@@ -14,8 +14,8 @@ export default class Sprite extends Entity implements IElement, IContainer {
     frames: [sx: number, sy: number, w: number, h: number][] = [];
     duration: number = 1000;
     time: number = 0;
-    frame: number = 0;
-    animated: boolean = false;
+    protected frame: number = 0;
+    protected animated: boolean = false;
     size = new vec2(0,0)
     aspecеRatio: number;
     constructor(engine: IEngine, name: string, image: ImageBitmap | HTMLImageElement) {
