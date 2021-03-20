@@ -7,10 +7,11 @@ export default class Card extends Entity {
         this.hide = false;
         this.time = 0;
         this.duration = 100;
-        this.counter = 0;
+        this.counter = 99;
         this.health = 0;
         this.attack = 0;
         this.armor = 0;
+        this.card = new Path2D();
         if (typeof width == "number")
             this.width = width;
         if (typeof height == "number")
@@ -20,10 +21,12 @@ export default class Card extends Entity {
             this.height = width.y;
         }
         this.loadBackGround();
+        this.engine.on("click", this.click.bind(this));
     }
     draw() {
         this.engine.ctx.save();
         if (!this.hide) {
+            this.engine.ctx.stroke(this.card);
             //health circle stat
             const radius = 10;
             const healthPos = new vec2(this.x + this.width - radius / 2, this.y + this.height - radius);
@@ -59,6 +62,8 @@ export default class Card extends Entity {
             this.time = utime;
             this.counter += 1;
             if (this.counter >= 100) {
+                this.card = new Path2D();
+                this.card.rect(this.x, this.y, this.width, this.height);
                 this.counter = -1;
             }
         }
@@ -86,5 +91,9 @@ export default class Card extends Entity {
     }
     anim(name, duration) {
         console.log(name, duration);
+    }
+    click(e) {
+        if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY))
+            this.emit('click', this);
     }
 }

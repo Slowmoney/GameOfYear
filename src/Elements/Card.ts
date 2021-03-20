@@ -9,10 +9,11 @@ export default class Card extends Entity implements IElement, IAnimated
     backGround: Sprite;
     time: number = 0;
     duration: number = 100;
-    counter = 0;
+    counter = 99;
     health = 0
     attack = 0
     armor = 0
+    card: Path2D= new Path2D()
     constructor(engine: IEngine, size: vec2);
     constructor(engine: IEngine, width: number | vec2, height?: number)
     {
@@ -25,13 +26,14 @@ export default class Card extends Entity implements IElement, IAnimated
             this.height = width.y;
         }
         this.loadBackGround();
+        this.engine.on("click", this.click.bind(this))
     }
     draw ()
     {
         this.engine.ctx.save()
         if (!this.hide)
         {
-
+            this.engine.ctx.stroke(this.card)
             //health circle stat
             const radius = 10
 
@@ -76,6 +78,9 @@ export default class Card extends Entity implements IElement, IAnimated
             this.counter += 1;
             if (this.counter >= 100)
             {
+
+                this.card = new Path2D()
+                this.card.rect(this.x, this.y, this.width, this.height)
                 this.counter = -1
             }
         }
@@ -107,5 +112,9 @@ export default class Card extends Entity implements IElement, IAnimated
     anim (name: string, duration: number)
     {
         console.log(name, duration);
+    }
+    protected click (e:MouseEvent)
+    {
+        if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)) this.emit('click',this)
     }
 }

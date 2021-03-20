@@ -3,6 +3,8 @@ import Game from './Game.js';
 
 console.log('start');
 
+
+
 class main {
     game: Game;
     engine: Engine;
