@@ -28,4 +28,8 @@ export var Utils;
         return x + y * width;
     }
     Utils.coordToIndex = coordToIndex;
+    function clamp(val, min, max) {
+        return Math.max(min, Math.min(max, val));
+    }
+    Utils.clamp = clamp;
 })(Utils || (Utils = {}));

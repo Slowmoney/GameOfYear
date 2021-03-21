@@ -42,31 +42,9 @@ export default class Layout extends Entity {
         const player = this.elements[playerIndex];
         const clickCoord = Utils.indexToCoord(index, this.width);
         const playerCoord = Utils.indexToCoord(playerIndex, this.width);
-        console.log(this.elements);
-        console.log(this.matrix);
-        console.log(target);
-        console.log(playerCoord, clickCoord);
-        console.log(clickCoord.x - playerCoord.x, clickCoord.y - playerCoord.y);
-        const dir = clickCoord.sub(playerCoord);
-        console.log(dir);
-        if (dir.y < 0) {
-            console.log("UP");
-            return;
-        }
-        if (dir.x < 0) {
-            console.log("LEFT");
-            return;
-        }
-        if (dir.y > 0) {
-            console.log("DOWN");
-            return;
-        }
-        if (dir.x > 0) {
-            console.log("RIGHT", playerCoord);
-            const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + 1, playerCoord.y, this.width)];
-            this.move(player, attackTo);
-            return;
-        }
+        const dir = clickCoord.sub(playerCoord).clamp(-1, 1);
+        const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)];
+        this.move(player, attackTo);
     }
     push(items) {
         items.forEach((e) => {
@@ -79,12 +57,12 @@ export default class Layout extends Entity {
     }
     move(target, to) {
         const actionResult = target.action(to);
-        console.log('actionResult', actionResult);
         if (actionResult) {
-            console.log("move", target, to);
+            //console.log("move", target, to);
             const index = this.elements.findIndex(p => p == to);
-            this.elements[index] = target;
             const playerIndex = this.elements.findIndex(e => e == target);
+            this.elements[index] = target;
+            console.log(index, playerIndex);
             this.elements[playerIndex] = null;
         }
         else {

@@ -34,5 +34,9 @@ export namespace Utils
         
         return x+y*width
     }
+    export function clamp (val:number,min:number,max:number)
+    {
+        return Math.max(min,Math.min(max,val));
+    }
 }
 
