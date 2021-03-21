@@ -30,8 +30,9 @@ export default class Player extends Entity implements IElement, IAnimated
         }
         //this.card.rect(this.x, this.y, this.width, this.height)
         this.loadBackGround();
-        this.engine.on('mousemove', this.mousemove.bind(this))
-        this.engine.on("click", this.click.bind(this))
+        /* this.engine.on('mousemove', this.mousemove.bind(this)) */
+        this.click=this.click.bind(this)
+        this.engine.on("click", this.click)
     }
     draw ()
     {
@@ -144,7 +145,8 @@ export default class Player extends Entity implements IElement, IAnimated
     }
     action (to: Entity)
     {
-        console.log(this,to);
+        if (!to) return true
+        
         
         let tempAttack = this.attack
 
@@ -152,7 +154,11 @@ export default class Player extends Entity implements IElement, IAnimated
         tempAttack = to.armor < 0 ? Math.abs(to.armor) : 0
         if (to.armor < 0) to.armor = 0
         to.health -= tempAttack
-        if (to.health < 0) to.health = 0
+        if (to.health < 0)
+        {
+            to.health = 0
+            to.destroy()
+        } 
 
         tempAttack = to.attack
 
@@ -160,10 +166,18 @@ export default class Player extends Entity implements IElement, IAnimated
         tempAttack = this.armor < 0 ? Math.abs(this.armor) : 0
         if (this.armor < 0) this.armor = 0
         this.health -= tempAttack
-        if (this.health < 0) this.health = 0
-
+        if (this.health < 0)
+        {
+            this.health = 0
+            this.destroy()
+        }
         if (to.health > 0 || this.health <= 0) return false
 
         return true
+    }
+    destroy ()
+    {
+        this.engine.off("click", this.click)
+
     }
 }

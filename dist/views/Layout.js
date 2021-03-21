@@ -37,6 +37,7 @@ export default class Layout extends Entity {
         this.updateLayout();
     }
     click(target) {
+        console.log(target);
         const index = this.elements.findIndex(p => p == target);
         const playerIndex = this.elements.findIndex(e => e && e.name == "Player");
         const player = this.elements[playerIndex];
@@ -58,11 +59,9 @@ export default class Layout extends Entity {
     move(target, to) {
         const actionResult = target.action(to);
         if (actionResult) {
-            //console.log("move", target, to);
             const index = this.elements.findIndex(p => p == to);
             const playerIndex = this.elements.findIndex(e => e == target);
             this.elements[index] = target;
-            console.log(index, playerIndex);
             this.elements[playerIndex] = null;
         }
         else {

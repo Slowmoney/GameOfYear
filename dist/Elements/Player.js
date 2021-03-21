@@ -22,8 +22,9 @@ export default class Player extends Entity {
         }
         //this.card.rect(this.x, this.y, this.width, this.height)
         this.loadBackGround();
-        this.engine.on('mousemove', this.mousemove.bind(this));
-        this.engine.on("click", this.click.bind(this));
+        /* this.engine.on('mousemove', this.mousemove.bind(this)) */
+        this.click = this.click.bind(this);
+        this.engine.on("click", this.click);
     }
     draw() {
         this.engine.ctx.save();
@@ -112,25 +113,33 @@ export default class Player extends Entity {
         //this.hide = this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)
     }
     action(to) {
-        console.log(this, to);
+        if (!to)
+            return true;
         let tempAttack = this.attack;
         to.armor -= tempAttack;
         tempAttack = to.armor < 0 ? Math.abs(to.armor) : 0;
         if (to.armor < 0)
             to.armor = 0;
         to.health -= tempAttack;
-        if (to.health < 0)
+        if (to.health < 0) {
             to.health = 0;
+            to.destroy();
+        }
         tempAttack = to.attack;
         this.armor -= tempAttack;
         tempAttack = this.armor < 0 ? Math.abs(this.armor) : 0;
         if (this.armor < 0)
             this.armor = 0;
         this.health -= tempAttack;
-        if (this.health < 0)
+        if (this.health < 0) {
             this.health = 0;
+            this.destroy();
+        }
         if (to.health > 0 || this.health <= 0)
             return false;
         return true;
+    }
+    destroy() {
+        this.engine.off("click", this.click);
     }
 }

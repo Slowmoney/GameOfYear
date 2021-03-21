@@ -24,7 +24,8 @@ export default class Card extends Entity implements IElement, IAnimated
             this.height = width.y;
         }
         this.loadBackGround();
-        this.engine.on("click", this.click.bind(this))
+        this.click=this.click.bind(this)
+        this.engine.on("click", this.click)
     }
     draw ()
     {
@@ -117,5 +118,9 @@ export default class Card extends Entity implements IElement, IAnimated
     protected click (e:MouseEvent)
     {
         if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)) this.emit('click',this)
+    }
+    destroy ()
+    {
+        this.engine.off("click", this.click)
     }
 }

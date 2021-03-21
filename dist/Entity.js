@@ -34,4 +34,6 @@ export default class Entity extends EventEmmiter {
         to;
         return true;
     }
+    destroy() {
+    }
 }

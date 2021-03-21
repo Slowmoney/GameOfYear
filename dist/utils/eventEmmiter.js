@@ -19,5 +19,12 @@ export default class EventEmmiter {
         else
             __classPrivateFieldGet(this, _events).set(eventName, [listener]);
     }
+    off(eventName, listener) {
+        if (__classPrivateFieldGet(this, _events).has(eventName)) {
+            const index = __classPrivateFieldGet(this, _events).get(eventName).indexOf(listener);
+            if (index > 0)
+                __classPrivateFieldGet(this, _events).get(eventName).splice(index, 1);
+        }
+    }
 }
 _events = new WeakMap();

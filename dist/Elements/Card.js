@@ -19,7 +19,8 @@ export default class Card extends Entity {
             this.height = width.y;
         }
         this.loadBackGround();
-        this.engine.on("click", this.click.bind(this));
+        this.click = this.click.bind(this);
+        this.engine.on("click", this.click);
     }
     draw() {
         this.engine.ctx.save();
@@ -93,5 +94,8 @@ export default class Card extends Entity {
     click(e) {
         if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY))
             this.emit('click', this);
+    }
+    destroy() {
+        this.engine.off("click", this.click);
     }
 }
