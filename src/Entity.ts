@@ -4,6 +4,7 @@ import vec2 from "./utils/vec2";
 
 export default class Entity extends EventEmmiter
 {
+    private animInterval:number
     protected engine: IEngine;
     protected x: number = 0;
     protected y: number = 0;
@@ -20,9 +21,25 @@ export default class Entity extends EventEmmiter
     }
     setPos (x: number, y: number)
     {
-        //console.log('setPos');
-        //console.log(x,y);
-        
+        let prevX = this.x
+        let prevY = this.y
+        console.log(prevX, prevY);
+        console.log(x, y);
+
+        let steps = 100;
+        let i = 0
+        clearInterval(this.animInterval)
+        this.animInterval = setInterval(() =>
+        {
+            let t = i / steps
+            this.x = prevX + t * (x - prevX)
+            this.y = prevY + t * (y - prevY)
+            if (++i>steps) {
+                clearInterval(this.animInterval)
+            }
+            
+        },1)
+
         this.x = x;
         this.y = y;
     }

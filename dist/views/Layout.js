@@ -34,7 +34,6 @@ export default class Layout extends Entity {
     }
     update(utime) {
         this.elements.forEach((elm) => elm && elm.update(utime));
-        this.updateLayout();
     }
     click(target) {
         console.log(target);
@@ -46,12 +45,15 @@ export default class Layout extends Entity {
         const dir = clickCoord.sub(playerCoord).clamp(-1, 1);
         const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)];
         this.move(player, attackTo);
+        this.updateLayout();
     }
     push(items) {
         items.forEach((e) => {
             e.on("click", this.click.bind(this));
         });
-        return this.elements.push(...items);
+        this.elements.push(...items);
+        this.updateLayout();
+        return this.elements.length;
     }
     get matrix() {
         return Utils.reshape(this.elements, this.width, this.height);

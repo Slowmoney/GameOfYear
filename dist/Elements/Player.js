@@ -68,9 +68,9 @@ export default class Player extends Entity {
     update(utime) {
         if (this.backGround)
             this.backGround.update(utime);
+        this.card = new Path2D();
+        this.card.rect(this.x, this.y, this.width, this.height);
         if (utime - this.time > this.duration) {
-            this.card = new Path2D();
-            this.card.rect(this.x, this.y, this.width, this.height);
             this.time = utime;
             this.counter += 1;
             if (this.counter >= 100) {

@@ -13,6 +13,7 @@ export default class EventEmmiter
     {
         if (this.#events.has(eventName))this.#events.get(eventName).push(listener)    
         else this.#events.set(eventName, [listener])
+        return ()=>this.off(eventName,listener)
     }
     off (eventName: string, listener: (...args:any) => any)
     {

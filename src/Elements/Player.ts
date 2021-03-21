@@ -89,12 +89,12 @@ export default class Player extends Entity implements IElement, IAnimated
     update (utime: number)
     {
         if (this.backGround) this.backGround.update(utime);
-
+        this.card = new Path2D()
+        this.card.rect(this.x, this.y, this.width, this.height)
         if (utime - this.time > this.duration)
         {
 
-            this.card = new Path2D()
-            this.card.rect(this.x, this.y, this.width, this.height)
+            
 
             this.time = utime;
             this.counter += 1;

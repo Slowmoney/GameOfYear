@@ -46,7 +46,7 @@ export default class Layout extends Entity implements IMenu
     update (utime: number)
     {
         this.elements.forEach((elm) => elm && elm.update(utime));
-        this.updateLayout()
+        
     }
     protected click (target: Entity)
     {
@@ -62,6 +62,7 @@ export default class Layout extends Entity implements IMenu
 
         const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)]
         this.move(player, attackTo)
+        this.updateLayout()
     }
     push (items: IElement[])
     {
@@ -70,7 +71,9 @@ export default class Layout extends Entity implements IMenu
         {
             e.on("click", this.click.bind(this))
         })
-        return this.elements.push(...items)
+        this.elements.push(...items)
+        this.updateLayout()
+        return this.elements.length
     }
 
     get matrix ()

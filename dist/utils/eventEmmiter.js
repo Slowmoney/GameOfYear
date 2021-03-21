@@ -18,6 +18,7 @@ export default class EventEmmiter {
             __classPrivateFieldGet(this, _events).get(eventName).push(listener);
         else
             __classPrivateFieldGet(this, _events).set(eventName, [listener]);
+        return () => this.off(eventName, listener);
     }
     off(eventName, listener) {
         if (__classPrivateFieldGet(this, _events).has(eventName)) {
