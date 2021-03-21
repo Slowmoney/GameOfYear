@@ -9,7 +9,7 @@ export default class Entity extends EventEmmiter
     protected y: number = 0;
     protected width: number;
     protected height: number;
-    health = 100
+    health = 30
     attack = 20
     armor = 15
     constructor(engine: IEngine)
@@ -21,6 +21,7 @@ export default class Entity extends EventEmmiter
     setPos (x: number, y: number)
     {
         //console.log('setPos');
+        //console.log(x,y);
         
         this.x = x;
         this.y = y;

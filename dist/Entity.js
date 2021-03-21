@@ -4,13 +4,14 @@ export default class Entity extends EventEmmiter {
         super();
         this.x = 0;
         this.y = 0;
-        this.health = 100;
+        this.health = 30;
         this.attack = 20;
         this.armor = 15;
         this.engine = engine;
     }
     setPos(x, y) {
         //console.log('setPos');
+        //console.log(x,y);
         this.x = x;
         this.y = y;
     }

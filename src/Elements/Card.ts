@@ -88,7 +88,7 @@ export default class Card extends Entity implements IElement, IAnimated
     drawBackGround ()
     {
         this.backGround.pos.x = this.x+this.width/2-this.backGround.width/2;
-        this.backGround.pos.y = this.y+this.height/2;
+        this.backGround.pos.y = this.y+this.height/2-this.backGround.height/2;
         
         this.backGround.draw();
     }

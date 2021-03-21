@@ -10,6 +10,7 @@ export default class Player extends Entity {
         this.duration = 100;
         this.counter = 99;
         this.attack = 40;
+        this.health = 130;
         this.card = new Path2D();
         if (typeof width == "number")
             this.width = width;
@@ -111,6 +112,7 @@ export default class Player extends Entity {
         //this.hide = this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)
     }
     action(to) {
+        console.log(this, to);
         let tempAttack = this.attack;
         to.armor -= tempAttack;
         tempAttack = to.armor < 0 ? Math.abs(to.armor) : 0;

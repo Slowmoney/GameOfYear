@@ -28,38 +28,31 @@ export default class Layout extends Entity implements IMenu
     }
     updateLayout ()
     {
-        this.elements.forEach((el, x, xa) =>
+        this.elements.forEach((el, x) =>
         {
-            const prevElx = xa[x - 1];
-            const newLine = !!(x % this.width);
-            const lineNum = Math.floor(x / this.width);
-            el.setPos(newLine ? (prevElx && prevElx.getWidth() ? prevElx.getWidth() + prevElx.getPos().x + this.gap.x : 0) : 0, el.getPos().y)
-            if (lineNum)
-            {
-                const elementsPrevLine = this.elements.slice((lineNum - 1) * this.width, lineNum * this.width);
-                const max = Math.max(...elementsPrevLine.map((e) => e.getHeight()));
-                const maxo = Math.max(...elementsPrevLine.map((e) => e.getPos().y));
-                el.setPos(el.getPos().x, max + maxo + this.gap.y)
-            }
+
+            if (!el) return
+            const coord = Utils.indexToCoord(x, this.width)
+            el.setPos(coord.x*el.getWidth()+coord.x*this.gap.x,coord.y*el.getHeight()+coord.y*this.gap.y)
             if (x >= this.width * this.height) el.hide = true;
         });
     }
     draw ()
     {
         this.engine.ctx.save()
-        this.elements.forEach((elm) => elm.draw());
+        this.elements.forEach((elm) => elm&&elm.draw());
         this.engine.ctx.resetTransform();
         this.engine.ctx.restore();
     }
     update (utime: number)
     {
-        this.elements.forEach((elm) => elm.update(utime));
+        this.elements.forEach((elm) => elm&&elm.update(utime));
         this.updateLayout()
     }
     protected click (target: Entity)
     {
         const index = this.elements.findIndex(p => p == target)
-        const playerIndex = this.elements.findIndex(e => e.name == "Player")
+        const playerIndex = this.elements.findIndex(e => e&&e.name == "Player")
         const player = this.elements[playerIndex]
         const clickCoord = Utils.indexToCoord(index, this.width)
         const playerCoord = Utils.indexToCoord(playerIndex, this.width)
@@ -123,6 +116,9 @@ export default class Layout extends Entity implements IMenu
             const index = this.elements.findIndex(p => p == to)
             this.elements[index] = <IElement>target
             
+            const playerIndex = this.elements.findIndex(e => e == target)
+            
+            this.elements[playerIndex]=null
         } else
         {
             console.log('check');
