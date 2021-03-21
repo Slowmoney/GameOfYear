@@ -56,17 +56,47 @@ export default class Layout extends Entity implements IMenu
         this.elements.forEach((elm) => elm.update(utime));
         this.updateLayout()
     }
-    protected click (e: Entity)
+    protected click (target: Entity)
     {
+        const index = this.elements.findIndex(p => p == target)
+        const playerIndex = this.elements.findIndex(e => e.name == "Player")
+        const player = this.elements[playerIndex]
+        const clickCoord = Utils.indexToCoord(index, this.width)
+        const playerCoord = Utils.indexToCoord(playerIndex, this.width)
+
         console.log(this.elements);
         console.log(this.matrix);
-        console.log(e);
-        console.log(this.elements.findIndex(p => p == e));
-        let index = this.elements.findIndex(p => p == e)
+        console.log(target);
 
-        let x = index % this.width
-        let y = Math.floor((index / this.width))
-        console.log(x, y);
+        console.log(playerCoord, clickCoord);
+
+        console.log(clickCoord.x - playerCoord.x, clickCoord.y - playerCoord.y);
+
+
+        const dir = clickCoord.sub(playerCoord)
+        console.log(dir);
+        if (dir.y < 0)
+        {
+            console.log("UP");
+            return
+        }
+        if (dir.x < 0)
+        {
+            console.log("LEFT");
+            return
+        }
+        if (dir.y > 0)
+        {
+            console.log("DOWN");
+            return
+        }
+        if (dir.x > 0)
+        {
+            console.log("RIGHT", playerCoord);
+            const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + 1, playerCoord.y, this.width)]
+            this.move(player, attackTo)
+            return
+        }
     }
     push (items: IElement[])
     {
@@ -81,6 +111,23 @@ export default class Layout extends Entity implements IMenu
     get matrix ()
     {
         return Utils.reshape(this.elements, this.width, this.height)
+    }
+
+    move (target: Entity, to: Entity)
+    {
+        const actionResult = target.action(to)
+        console.log('actionResult', actionResult);
+        if (actionResult)
+        {
+            console.log("move", target, to);
+            const index = this.elements.findIndex(p => p == to)
+            this.elements[index] = <IElement>target
+            
+        } else
+        {
+            console.log('check');
+
+        }
     }
 }
 

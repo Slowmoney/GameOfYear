@@ -19,7 +19,9 @@ export interface IContainer {
     getHeight: () => number
     setHeight: () => number
 }
-export interface IElement extends Entity {
+export interface IElement extends Entity
+{
+    name:string
     draw: () => void;
     update: (utime: number) => void;
     setPos: (x: number, y: number) => void;

@@ -3,4 +3,9 @@ export default class vec2 {
         this.x = x;
         this.y = y;
     }
+    sub(v) {
+        this.x -= v.x;
+        this.y -= v.y;
+        return this;
+    }
 }

@@ -4,13 +4,12 @@ import Sprite from './Sprite.js';
 export default class Player extends Entity {
     constructor(engine, width, height) {
         super(engine);
+        this.name = "Player";
         this.hide = false;
         this.time = 0;
         this.duration = 100;
         this.counter = 99;
-        this.health = 0;
-        this.attack = 0;
-        this.armor = 0;
+        this.attack = 40;
         this.card = new Path2D();
         if (typeof width == "number")
             this.width = width;
@@ -39,19 +38,19 @@ export default class Player extends Entity {
             this.engine.ctx.fill();
             this.engine.ctx.fillStyle = "#eee";
             this.engine.ctx.textAlign = "center";
-            this.engine.ctx.fillText(this.counter + "", healthPos.x, healthPos.y + 4);
+            this.engine.ctx.fillText(this.health + "", healthPos.x, healthPos.y + 4);
             //attack circle stat
-            const attckPos = new vec2(this.x + radius, this.y + this.height - radius);
+            const attackPos = new vec2(this.x + radius, this.y + this.height - radius);
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#9e9e9e";
-            this.engine.ctx.arc(attckPos.x, attckPos.y, radius, 0, 2 * Math.PI);
+            this.engine.ctx.arc(attackPos.x, attackPos.y, radius, 0, 2 * Math.PI);
             this.engine.ctx.fill();
             this.engine.ctx.fillStyle = "#555";
             this.engine.ctx.textAlign = "center";
-            this.engine.ctx.fillText(this.counter + "", attckPos.x, attckPos.y + 4);
+            this.engine.ctx.fillText(this.attack + "", attackPos.x, attackPos.y + 4);
             //armor circle stat
             const armorPos = new vec2(this.x + this.width - 10, this.y + 10);
-            this.engine.ctx.fillText(this.counter + "", armorPos.x, armorPos.y);
+            this.engine.ctx.fillText(this.armor + "", armorPos.x, armorPos.y);
             const playerSprite = Sprite.all.get('poo');
             playerSprite.draw();
             playerSprite.pos.y = this.y + 30;
@@ -68,6 +67,8 @@ export default class Player extends Entity {
         if (this.backGround)
             this.backGround.update(utime);
         if (utime - this.time > this.duration) {
+            this.card = new Path2D();
+            this.card.rect(this.x, this.y, this.width, this.height);
             this.time = utime;
             this.counter += 1;
             if (this.counter >= 100) {
@@ -108,5 +109,26 @@ export default class Player extends Entity {
     mousemove(e) {
         e;
         //this.hide = this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)
+    }
+    action(to) {
+        let tempAttack = this.attack;
+        to.armor -= tempAttack;
+        tempAttack = to.armor < 0 ? Math.abs(to.armor) : 0;
+        if (to.armor < 0)
+            to.armor = 0;
+        to.health -= tempAttack;
+        if (to.health < 0)
+            to.health = 0;
+        tempAttack = to.attack;
+        this.armor -= tempAttack;
+        tempAttack = this.armor < 0 ? Math.abs(this.armor) : 0;
+        if (this.armor < 0)
+            this.armor = 0;
+        this.health -= tempAttack;
+        if (this.health < 0)
+            this.health = 0;
+        if (to.health > 0 || this.health <= 0)
+            return false;
+        return true;
     }
 }

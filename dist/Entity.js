@@ -4,6 +4,9 @@ export default class Entity extends EventEmmiter {
         super();
         this.x = 0;
         this.y = 0;
+        this.health = 100;
+        this.attack = 20;
+        this.armor = 15;
         this.engine = engine;
     }
     setPos(x, y) {
@@ -25,5 +28,9 @@ export default class Entity extends EventEmmiter {
     }
     setHeight(height) {
         this.height = height;
+    }
+    action(to) {
+        to;
+        return true;
     }
 }

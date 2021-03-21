@@ -9,6 +9,9 @@ export default class Entity extends EventEmmiter
     protected y: number = 0;
     protected width: number;
     protected height: number;
+    health = 100
+    attack = 20
+    armor = 15
     constructor(engine: IEngine)
     {
         super()
@@ -41,5 +44,10 @@ export default class Entity extends EventEmmiter
     setHeight (height: number)
     {
         this.height = height
+    }
+    action (to: Entity)
+    {
+        to
+        return true
     }
 }
