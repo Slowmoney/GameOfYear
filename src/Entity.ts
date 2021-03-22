@@ -30,7 +30,7 @@ export default class Entity extends EventEmmiter implements IAnimated
         
 
         this.animation.set("move", new Move(100))
-        this.animation.set("popup", new PopUp(1000))
+        this.animation.set("popup", new PopUp(500))
     }
     setPos (x: number, y: number)
     {

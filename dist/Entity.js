@@ -16,7 +16,7 @@ export default class Entity extends EventEmmiter {
         this.animation = new Map();
         this.engine = engine;
         this.animation.set("move", new Move(100));
-        this.animation.set("popup", new PopUp(1000));
+        this.animation.set("popup", new PopUp(500));
     }
     setPos(x, y) {
         this.x = x;

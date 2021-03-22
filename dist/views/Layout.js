@@ -87,7 +87,7 @@ export default class Layout extends Entity {
                 new vec2(-1, 0).add(playerCoord),
             ].filter(e => e.x >= 0 && e.y >= 0).map(e => Utils.coordToIndex(e.x, e.y, this.width));
             console.log(fourCard);
-            fourCard.forEach(e => this.elements[e].anim(animName, 10));
+            fourCard.forEach(e => this.elements[e] && this.elements[e].anim(animName, 10));
         }
     }
 }
