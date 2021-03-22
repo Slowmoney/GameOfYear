@@ -42,43 +42,63 @@ export default class Player extends Entity implements IElement, IAnimated
             //this.card.rect(this.x + this.offset.x, this.y + this.offset.y, this.width, this.height)
             this.engine.ctx.stroke(this.card)
 
-            //health circle stat
-            const radius = 10
-
-            const healthPos = new vec2(this.x + this.width - radius, this.y + this.height - radius)
             this.engine.ctx.beginPath();
-            this.engine.ctx.fillStyle = "#f44336"
-            this.engine.ctx.arc(healthPos.x, healthPos.y, radius, 0, 2 * Math.PI);
-            this.engine.ctx.fill()
-            this.engine.ctx.fillStyle = "#eee"
-            this.engine.ctx.textAlign = "center"
-            this.engine.ctx.fillText(this.health + "", healthPos.x, healthPos.y + 4)
+            const healthSprite = Sprite.all.get('health')
+            healthSprite.offset.x = 0
+            healthSprite.offset.y = 0
+            healthSprite.setWidth(254)
+            healthSprite.setHeight(254)
+            healthSprite.size = new vec2(24, 24)
+            healthSprite.setPos(this.x+this.width-healthSprite.size.x,this.y+this.height-healthSprite.size.y)
+            healthSprite.draw()
 
-            //attack circle stat
-            const attackPos = new vec2(this.x + radius, this.y + this.height - radius)
+            this.engine.ctx.fillStyle = "#fff"
+            this.engine.ctx.textAlign = "center"
+            this.engine.ctx.fillText(this.health + "", this.x+this.width-healthSprite.size.x/2,this.y+this.height-healthSprite.size.y/2+2)
+
+            this.engine.ctx.closePath();
+
+
+            //attck circle stat
             this.engine.ctx.beginPath();
-            this.engine.ctx.fillStyle = "#9e9e9e"
-            this.engine.ctx.arc(attackPos.x, attackPos.y, radius, 0, 2 * Math.PI);
-            this.engine.ctx.fill()
-
-            this.engine.ctx.fillStyle = "#555"
+            const swordSprite = Sprite.all.get('swords')
+            swordSprite.offset.x = 0
+            swordSprite.offset.y = 0
+            swordSprite.setWidth(24)
+            swordSprite.setHeight(24)
+            swordSprite.size = new vec2(24, 24)
+            swordSprite.setPos(this.x,this.y+this.height-swordSprite.size.y-10)
+            swordSprite.draw()
+            this.engine.ctx.fillStyle = "#000"
             this.engine.ctx.textAlign = "center"
-            this.engine.ctx.fillText(this.attack + "", attackPos.x, attackPos.y + 4)
+            this.engine.ctx.fillText(this.attack + "",this.x+swordSprite.size.x/3,this.y+this.height)
+            this.engine.ctx.closePath();
 
             //armor circle stat
-            const armorPos = new vec2(this.x + this.width - 10, this.y + 10)
-            this.engine.ctx.fillText(this.armor + "", armorPos.x, armorPos.y)
+            const armorPos = new vec2(this.x + this.width, this.y)
+            this.engine.ctx.beginPath();
+            const shieldSprite = Sprite.all.get('shield')
+            shieldSprite.offset.x = 0
+            shieldSprite.offset.y = 0
+            shieldSprite.setWidth(24)
+            shieldSprite.setHeight(24)
+            shieldSprite.size = new vec2(24, 24)
+            shieldSprite.setPos(this.x+this.width-shieldSprite.getWidth(),this.y)
+            shieldSprite.draw()
+
+            this.engine.ctx.fillStyle = "#fff"
+            this.engine.ctx.textAlign = "center"
+            this.engine.ctx.fillText(this.armor + "", armorPos.x-shieldSprite.size.x/2, armorPos.y+shieldSprite.size.y/2+3)
 
             const playerSprite = Sprite.all.get('poo')
             playerSprite.draw();
-
-
-            playerSprite.pos.y = this.y + 30;
-
+            this.engine.ctx.closePath();
+            
             playerSprite.size.x = 9 * 10 - 30
             playerSprite.size.y = playerSprite.aspecеRatio * playerSprite.size.x
 
-            playerSprite.pos.x = (this.x) + (this.width - playerSprite.size.x) / 2;
+
+            playerSprite.setPos((this.x) + (this.width - playerSprite.size.x) / 2, this.y + 30)
         }
         //this.engine.ctx.translate(100-(this.width/2*this.counter), 0);
         //this.engine.ctx.scale(this.counter,1);
@@ -109,8 +129,7 @@ export default class Player extends Entity implements IElement, IAnimated
     }
     protected drawBackGround ()
     {
-        this.backGround.pos.x = this.x;
-        this.backGround.pos.y = this.y;
+        this.backGround.setPos(this.x,this.y)
         this.backGround.draw();
     }
     protected loadBackGround ()

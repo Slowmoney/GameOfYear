@@ -5,7 +5,6 @@ import vec2 from "./utils/vec2";
 
 export default class Entity extends EventEmmiter implements IAnimated
 {
-    private animInterval:number
     protected engine: IEngine;
     protected x: number = 0;
     protected y: number = 0;

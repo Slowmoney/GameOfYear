@@ -8,7 +8,6 @@ export default class Sprite extends Entity implements IElement {
     hide: boolean;
     width: number;
     height: number;
-    pos: vec2 = new vec2(0, 0);
     name: string;
     static all = new Map<string, Sprite>();
     frames: [sx: number, sy: number, w: number, h: number][] = [];
@@ -30,7 +29,7 @@ export default class Sprite extends Entity implements IElement {
     }
     draw ()
     {
-        this.engine.ctx.drawImage(this.image, this.offset.x, this.offset.y, this.width, this.height, this.pos.x, this.pos.y,this.size.x,this.size.y);
+        this.engine.ctx.drawImage(this.image, this.offset.x, this.offset.y, this.width, this.height, this.x, this.y,this.size.x,this.size.y);
     }
     update(utime: number) {
         if (utime - this.time > this.duration) {
@@ -56,4 +55,5 @@ export default class Sprite extends Entity implements IElement {
         this.frames.push(...frames);
         this.duration = duration;
     }
+
 }

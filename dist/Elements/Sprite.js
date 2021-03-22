@@ -4,7 +4,6 @@ export default class Sprite extends Entity {
     constructor(engine, name, image) {
         super(engine);
         this.offset = new vec2(0, 0);
-        this.pos = new vec2(0, 0);
         this.frames = [];
         this.duration = 1000;
         this.time = 0;
@@ -20,7 +19,7 @@ export default class Sprite extends Entity {
         Sprite.all.set(this.name, this);
     }
     draw() {
-        this.engine.ctx.drawImage(this.image, this.offset.x, this.offset.y, this.width, this.height, this.pos.x, this.pos.y, this.size.x, this.size.y);
+        this.engine.ctx.drawImage(this.image, this.offset.x, this.offset.y, this.width, this.height, this.x, this.y, this.size.x, this.size.y);
     }
     update(utime) {
         if (utime - this.time > this.duration) {

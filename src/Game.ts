@@ -26,6 +26,9 @@ export default class Game extends EventEmmiter
             { name: 'test2', url: './sprites/test2.png' },
             { name: 'mega', url: './sprites/mega.png' },
             { name: 'poo', url: './sprites/heroes/1598971053539.png' },
+            { name: 'shield', url: './sprites/shield/Overall.png' },
+            { name: 'swords', url: './sprites/sword.png' },
+            { name: 'health', url: './sprites/health.png' },
         ];
         this.view = new Layout(this.engine, 3, 3).setGap(10, 10);
         this.update = this.update.bind(this);
