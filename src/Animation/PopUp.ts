@@ -21,9 +21,6 @@ export class PopUp extends Anim
         entity.scale.x = scale
         entity.scale.y = scale
 
-        entity.translate.x = entity.getWidth() - ((entity.getPos().x)*scale) + (entity.getPos().x)- (((entity.getWidth()) * scale) / 2) - (entity.getWidth() / 2)
-        entity.translate.y = entity.getHeight() - ((entity.getPos().y)*scale) + (entity.getPos().y)- (((entity.getHeight()) * scale) / 2) - (entity.getHeight() / 2)
-
         if (time - this.step > this.maxStep)
         {
             console.log(time, this.step);

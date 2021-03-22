@@ -8,7 +8,7 @@ export default class Player extends Entity {
         this.hide = false;
         this.time = 0;
         this.counter = 99;
-        this.health = 60;
+        this.health = 140;
         this.card = new Path2D();
         if (typeof width == "number")
             this.width = width;
@@ -43,20 +43,6 @@ export default class Player extends Entity {
             this.engine.ctx.textAlign = "center";
             this.engine.ctx.fillText(this.health + "", this.x + this.width - healthSprite.size.x / 2, this.y + this.height - healthSprite.size.y / 2 + 2);
             this.engine.ctx.closePath();
-            //attck circle stat
-            /*             this.engine.ctx.beginPath();
-                        const swordSprite = Sprite.all.get('swords')
-                        swordSprite.offset.x = 0
-                        swordSprite.offset.y = 0
-                        swordSprite.setWidth(24)
-                        swordSprite.setHeight(24)
-                        swordSprite.size = new vec2(24, 24)
-                        swordSprite.setPos(this.x,this.y+this.height-swordSprite.size.y-10)
-                        swordSprite.draw()
-                        this.engine.ctx.fillStyle = "#000"
-                        this.engine.ctx.textAlign = "center"
-                        this.engine.ctx.fillText(this.attack + "",this.x+swordSprite.size.x/3,this.y+this.height)
-                        this.engine.ctx.closePath(); */
             //armor circle stat
             const armorPos = new vec2(this.x + this.width, this.y);
             this.engine.ctx.beginPath();
