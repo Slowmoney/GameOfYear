@@ -1,3 +1,4 @@
+import { Anim } from "./Animation/Animation.js";
 import EventEmmiter from "./utils/eventEmmiter.js";
 export default class Entity extends EventEmmiter {
     constructor(engine) {
@@ -7,24 +8,12 @@ export default class Entity extends EventEmmiter {
         this.health = 30;
         this.attack = 20;
         this.armor = 15;
+        this.time = 10;
+        this.duration = 100;
+        this.animation = new Anim(100);
         this.engine = engine;
     }
     setPos(x, y) {
-        let prevX = this.x;
-        let prevY = this.y;
-        console.log(prevX, prevY);
-        console.log(x, y);
-        let steps = 100;
-        let i = 0;
-        clearInterval(this.animInterval);
-        this.animInterval = setInterval(() => {
-            let t = i / steps;
-            this.x = prevX + t * (x - prevX);
-            this.y = prevY + t * (y - prevY);
-            if (++i > steps) {
-                clearInterval(this.animInterval);
-            }
-        }, 1);
         this.x = x;
         this.y = y;
     }

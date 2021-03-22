@@ -7,7 +7,6 @@ export default class Player extends Entity {
         this.name = "Player";
         this.hide = false;
         this.time = 0;
-        this.duration = 100;
         this.counter = 99;
         this.attack = 40;
         this.health = 130;
@@ -70,6 +69,7 @@ export default class Player extends Entity {
             this.backGround.update(utime);
         this.card = new Path2D();
         this.card.rect(this.x, this.y, this.width, this.height);
+        this.animation.render(this, utime);
         if (utime - this.time > this.duration) {
             this.time = utime;
             this.counter += 1;

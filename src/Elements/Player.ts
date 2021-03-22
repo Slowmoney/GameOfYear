@@ -12,11 +12,11 @@ export default class Player extends Entity implements IElement, IAnimated
     hide: boolean = false;
     backGround: Sprite
     time: number = 0;
-    duration: number = 100;
     counter = 99;
     attack = 40
     health = 130
     card: Path2D = new Path2D()
+
     constructor(engine: IEngine, size: vec2);
     constructor(engine: IEngine, width: number | vec2, height?: number)
     {
@@ -91,15 +91,16 @@ export default class Player extends Entity implements IElement, IAnimated
         if (this.backGround) this.backGround.update(utime);
         this.card = new Path2D()
         this.card.rect(this.x, this.y, this.width, this.height)
+        this.animation.render(this, utime)
         if (utime - this.time > this.duration)
         {
-
             
-
             this.time = utime;
             this.counter += 1;
             if (this.counter >= 100)
             {
+
+                
                 this.card = new Path2D()
                 this.card.rect(this.x, this.y, this.width, this.height)
                 this.counter = -1
@@ -172,6 +173,9 @@ export default class Player extends Entity implements IElement, IAnimated
             this.destroy()
         }
         if (to.health > 0 || this.health <= 0) return false
+
+
+        
 
         return true
     }

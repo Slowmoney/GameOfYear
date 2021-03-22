@@ -52,9 +52,11 @@ export default class Game extends EventEmmiter {
             new Card(this.engine, cardSize),
             new Card(this.engine, cardSize),
             new Card(this.engine, cardSize),
+            new Card(this.engine, cardSize),
+            new Card(this.engine, cardSize),
         ];
         this.view.push(elem);
-        this.view.update(0);
+        //this.view.update(0);
         requestAnimationFrame(this.update);
     }
 }

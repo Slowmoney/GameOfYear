@@ -7,7 +7,6 @@ export default class Card extends Entity {
         this.name = "Card";
         this.hide = false;
         this.time = 0;
-        this.duration = 100;
         this.counter = 99;
         this.card = new Path2D();
         if (typeof width == "number")
@@ -57,9 +56,8 @@ export default class Card extends Entity {
     update(utime) {
         if (this.backGround)
             this.backGround.update(utime);
+        this.animation.render(this, utime);
         if (utime - this.time > this.duration) {
-            this.card = new Path2D();
-            this.card.rect(this.x, this.y, this.width, this.height);
             this.time = utime;
             this.counter += 1;
             if (this.counter >= 100) {
@@ -68,6 +66,8 @@ export default class Card extends Entity {
         }
     }
     drawBackGround() {
+        this.card = new Path2D();
+        this.card.rect(this.x, this.y, this.width, this.height);
         this.backGround.pos.x = this.x + this.width / 2 - this.backGround.width / 2;
         this.backGround.pos.y = this.y + this.height / 2 - this.backGround.height / 2;
         this.backGround.draw();

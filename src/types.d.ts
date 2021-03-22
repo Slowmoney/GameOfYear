@@ -40,3 +40,5 @@ export interface IAnimated
     time: number
     duration: number
 }
+
+export type AnimationType = (startStep: number, maxStep: number, loop?: boolean) => (frames:[sx: number, sy: number, w: number, h: number][]) => (cb: (step: number, maxStep: number) => {}) => boolean

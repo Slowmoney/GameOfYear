@@ -5,13 +5,12 @@ import Sprite from './Sprite.js';
 
 export default class Card extends Entity implements IElement, IAnimated
 {
-    name="Card"
+    name = "Card"
     hide: boolean = false;
     backGround: Sprite;
     time: number = 0;
-    duration: number = 100;
     counter = 99;
-    card: Path2D= new Path2D()
+    card: Path2D = new Path2D()
     constructor(engine: IEngine, size: vec2);
     constructor(engine: IEngine, width: number | vec2, height?: number)
     {
@@ -24,7 +23,7 @@ export default class Card extends Entity implements IElement, IAnimated
             this.height = width.y;
         }
         this.loadBackGround();
-        this.click=this.click.bind(this)
+        this.click = this.click.bind(this)
         this.engine.on("click", this.click)
     }
     draw ()
@@ -36,7 +35,7 @@ export default class Card extends Entity implements IElement, IAnimated
             //health circle stat
             const radius = 10
 
-            const healthPos = new vec2(this.x  + this.width - radius, this.y + this.height - radius)
+            const healthPos = new vec2(this.x + this.width - radius, this.y + this.height - radius)
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#f44336"
             this.engine.ctx.arc(healthPos.x, healthPos.y, radius, 0, 2 * Math.PI);
@@ -46,7 +45,7 @@ export default class Card extends Entity implements IElement, IAnimated
             this.engine.ctx.fillText(this.health + "", healthPos.x, healthPos.y + 4)
 
             //attack circle stat
-            const attackPos = new vec2(this.x +  radius, this.y +  this.height - radius)
+            const attackPos = new vec2(this.x + radius, this.y + this.height - radius)
             this.engine.ctx.beginPath();
             this.engine.ctx.fillStyle = "#9e9e9e"
             this.engine.ctx.arc(attackPos.x, attackPos.y, radius, 0, 2 * Math.PI);
@@ -57,7 +56,7 @@ export default class Card extends Entity implements IElement, IAnimated
             this.engine.ctx.fillText(this.attack + "", attackPos.x, attackPos.y + 4)
 
             //armor circle stat
-            const armorPos = new vec2(this.x +  this.width-10, this.y +10)
+            const armorPos = new vec2(this.x + this.width - 10, this.y + 10)
             this.engine.ctx.fillText(this.armor + "", armorPos.x, armorPos.y)
 
         }
@@ -70,11 +69,10 @@ export default class Card extends Entity implements IElement, IAnimated
     update (utime: number)
     {
         if (this.backGround) this.backGround.update(utime);
-
+        this.animation.render(this, utime)
         if (utime - this.time > this.duration)
         {
-            this.card = new Path2D()
-            this.card.rect(this.x, this.y, this.width, this.height)
+
 
             this.time = utime;
             this.counter += 1;
@@ -88,9 +86,11 @@ export default class Card extends Entity implements IElement, IAnimated
     }
     drawBackGround ()
     {
-        this.backGround.pos.x = this.x+this.width/2-this.backGround.width/2;
-        this.backGround.pos.y = this.y+this.height/2-this.backGround.height/2;
-        
+        this.card = new Path2D()
+        this.card.rect(this.x, this.y, this.width, this.height)
+        this.backGround.pos.x = this.x + this.width / 2 - this.backGround.width / 2;
+        this.backGround.pos.y = this.y + this.height / 2 - this.backGround.height / 2;
+
         this.backGround.draw();
     }
     loadBackGround ()
@@ -115,9 +115,9 @@ export default class Card extends Entity implements IElement, IAnimated
     {
         console.log(name, duration);
     }
-    protected click (e:MouseEvent)
+    protected click (e: MouseEvent)
     {
-        if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)) this.emit('click',this)
+        if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)) this.emit('click', this)
     }
     destroy ()
     {

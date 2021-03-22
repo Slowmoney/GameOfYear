@@ -21,7 +21,9 @@ export default class Layout extends Entity {
             if (!el)
                 return;
             const coord = Utils.indexToCoord(x, this.width);
-            el.setPos(coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y);
+            let pos = el.getPos();
+            el.animation.run();
+            el.animation.setFrames([[pos.x, pos.y, coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y]]);
             if (x >= this.width * this.height)
                 el.hide = true;
         });
@@ -42,10 +44,18 @@ export default class Layout extends Entity {
         const player = this.elements[playerIndex];
         const clickCoord = Utils.indexToCoord(index, this.width);
         const playerCoord = Utils.indexToCoord(playerIndex, this.width);
-        const dir = clickCoord.sub(playerCoord).clamp(-1, 1);
+        const dir = clickCoord.sub(playerCoord);
+        console.log(dir);
+        if (!dir.x && !dir.y)
+            return;
+        if (dir.x > 1)
+            return;
+        if (dir.y > 1)
+            return;
+        if (dir.x == 1 && dir.y == 1 || dir.x == 1 && dir.y == -1 || dir.x == -1 && dir.y == -1 || dir.x == -1 && dir.y == 1)
+            return;
         const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)];
         this.move(player, attackTo);
-        this.updateLayout();
     }
     push(items) {
         items.forEach((e) => {
@@ -65,6 +75,7 @@ export default class Layout extends Entity {
             const playerIndex = this.elements.findIndex(e => e == target);
             this.elements[index] = target;
             this.elements[playerIndex] = null;
+            this.updateLayout();
         }
         else {
             console.log('check');
