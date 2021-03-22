@@ -13,7 +13,7 @@ export default class Player extends Entity implements IElement, IAnimated
     backGround: Sprite
     time: number = 0;
     counter = 99;
-    attack = 40
+
     health = 130
     card: Path2D = new Path2D()
 
@@ -31,7 +31,7 @@ export default class Player extends Entity implements IElement, IAnimated
         //this.card.rect(this.x, this.y, this.width, this.height)
         this.loadBackGround();
         /* this.engine.on('mousemove', this.mousemove.bind(this)) */
-        this.click=this.click.bind(this)
+        this.click = this.click.bind(this)
         this.engine.on("click", this.click)
     }
     draw ()
@@ -49,30 +49,30 @@ export default class Player extends Entity implements IElement, IAnimated
             healthSprite.setWidth(254)
             healthSprite.setHeight(254)
             healthSprite.size = new vec2(24, 24)
-            healthSprite.setPos(this.x+this.width-healthSprite.size.x,this.y+this.height-healthSprite.size.y)
+            healthSprite.setPos(this.x + this.width - healthSprite.size.x, this.y + this.height - healthSprite.size.y)
             healthSprite.draw()
 
             this.engine.ctx.fillStyle = "#fff"
             this.engine.ctx.textAlign = "center"
-            this.engine.ctx.fillText(this.health + "", this.x+this.width-healthSprite.size.x/2,this.y+this.height-healthSprite.size.y/2+2)
+            this.engine.ctx.fillText(this.health + "", this.x + this.width - healthSprite.size.x / 2, this.y + this.height - healthSprite.size.y / 2 + 2)
 
             this.engine.ctx.closePath();
 
 
             //attck circle stat
-            this.engine.ctx.beginPath();
-            const swordSprite = Sprite.all.get('swords')
-            swordSprite.offset.x = 0
-            swordSprite.offset.y = 0
-            swordSprite.setWidth(24)
-            swordSprite.setHeight(24)
-            swordSprite.size = new vec2(24, 24)
-            swordSprite.setPos(this.x,this.y+this.height-swordSprite.size.y-10)
-            swordSprite.draw()
-            this.engine.ctx.fillStyle = "#000"
-            this.engine.ctx.textAlign = "center"
-            this.engine.ctx.fillText(this.attack + "",this.x+swordSprite.size.x/3,this.y+this.height)
-            this.engine.ctx.closePath();
+            /*             this.engine.ctx.beginPath();
+                        const swordSprite = Sprite.all.get('swords')
+                        swordSprite.offset.x = 0
+                        swordSprite.offset.y = 0
+                        swordSprite.setWidth(24)
+                        swordSprite.setHeight(24)
+                        swordSprite.size = new vec2(24, 24)
+                        swordSprite.setPos(this.x,this.y+this.height-swordSprite.size.y-10)
+                        swordSprite.draw()
+                        this.engine.ctx.fillStyle = "#000"
+                        this.engine.ctx.textAlign = "center"
+                        this.engine.ctx.fillText(this.attack + "",this.x+swordSprite.size.x/3,this.y+this.height)
+                        this.engine.ctx.closePath(); */
 
             //armor circle stat
             const armorPos = new vec2(this.x + this.width, this.y)
@@ -83,17 +83,17 @@ export default class Player extends Entity implements IElement, IAnimated
             shieldSprite.setWidth(24)
             shieldSprite.setHeight(24)
             shieldSprite.size = new vec2(24, 24)
-            shieldSprite.setPos(this.x+this.width-shieldSprite.getWidth(),this.y)
+            shieldSprite.setPos(this.x + this.width - shieldSprite.getWidth(), this.y)
             shieldSprite.draw()
 
             this.engine.ctx.fillStyle = "#fff"
             this.engine.ctx.textAlign = "center"
-            this.engine.ctx.fillText(this.armor + "", armorPos.x-shieldSprite.size.x/2, armorPos.y+shieldSprite.size.y/2+3)
+            this.engine.ctx.fillText(this.armor + "", armorPos.x - shieldSprite.size.x / 2, armorPos.y + shieldSprite.size.y / 2 + 3)
 
             const playerSprite = Sprite.all.get('poo')
             playerSprite.draw();
             this.engine.ctx.closePath();
-            
+
             playerSprite.size.x = 9 * 10 - 30
             playerSprite.size.y = playerSprite.aspecеRatio * playerSprite.size.x
 
@@ -114,13 +114,13 @@ export default class Player extends Entity implements IElement, IAnimated
         this.animation.render(this, utime)
         if (utime - this.time > this.duration)
         {
-            
+
             this.time = utime;
             this.counter += 1;
             if (this.counter >= 100)
             {
 
-                
+
                 this.card = new Path2D()
                 this.card.rect(this.x, this.y, this.width, this.height)
                 this.counter = -1
@@ -129,7 +129,7 @@ export default class Player extends Entity implements IElement, IAnimated
     }
     protected drawBackGround ()
     {
-        this.backGround.setPos(this.x,this.y)
+        this.backGround.setPos(this.x, this.y)
         this.backGround.draw();
     }
     protected loadBackGround ()
@@ -166,9 +166,11 @@ export default class Player extends Entity implements IElement, IAnimated
     action (to: Entity)
     {
         if (!to) return true
-        
-        
-        let tempAttack = this.attack
+
+        let tempAttack = this.health + this.armor
+
+        let tempHealth = to.health
+        let tempArmor = to.armor
 
         to.armor -= tempAttack
         tempAttack = to.armor < 0 ? Math.abs(to.armor) : 0
@@ -178,9 +180,9 @@ export default class Player extends Entity implements IElement, IAnimated
         {
             to.health = 0
             to.destroy()
-        } 
+        }
 
-        tempAttack = to.attack
+        tempAttack = tempHealth+tempArmor
 
         this.armor -= tempAttack
         tempAttack = this.armor < 0 ? Math.abs(this.armor) : 0
@@ -191,10 +193,11 @@ export default class Player extends Entity implements IElement, IAnimated
             this.health = 0
             this.destroy()
         }
+
         if (to.health > 0 || this.health <= 0) return false
 
 
-        
+
 
         return true
     }

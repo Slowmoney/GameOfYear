@@ -6,7 +6,6 @@ export default class Entity extends EventEmmiter {
         this.x = 0;
         this.y = 0;
         this.health = 30;
-        this.attack = 20;
         this.armor = 15;
         this.time = 10;
         this.duration = 100;

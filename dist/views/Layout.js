@@ -76,8 +76,10 @@ export default class Layout extends Entity {
             this.elements[index] = target;
             this.elements[playerIndex] = null;
             this.updateLayout();
+            //
         }
         else {
+            //this.move(target, to)
             console.log('check');
         }
     }

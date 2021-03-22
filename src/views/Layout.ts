@@ -99,8 +99,10 @@ export default class Layout extends Entity implements IMenu
             this.elements[index] = <IElement>target
             this.elements[playerIndex] = null
             this.updateLayout()
+            //
         } else
         {
+            //this.move(target, to)
             console.log('check');
 
         }

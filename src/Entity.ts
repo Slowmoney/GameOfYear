@@ -11,7 +11,7 @@ export default class Entity extends EventEmmiter implements IAnimated
     protected width: number;
     protected height: number;
     health = 30
-    attack = 20
+
     armor = 15
 
     time = 10

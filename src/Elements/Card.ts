@@ -49,7 +49,7 @@ export default class Card extends Entity implements IElement, IAnimated
             this.engine.ctx.closePath();
 
             //attck circle stat
-            this.engine.ctx.beginPath();
+/*             this.engine.ctx.beginPath();
             const swordSprite = Sprite.all.get('swords')
             swordSprite.offset.x = 0
             swordSprite.offset.y = 0
@@ -61,7 +61,7 @@ export default class Card extends Entity implements IElement, IAnimated
             this.engine.ctx.fillStyle = "#000"
             this.engine.ctx.textAlign = "center"
             this.engine.ctx.fillText(this.attack + "", this.x + swordSprite.size.x / 3, this.y + this.height)
-            this.engine.ctx.closePath();
+            this.engine.ctx.closePath(); */
 
             //armor circle stat
             const armorPos = new vec2(this.x + this.width, this.y)
