@@ -29,9 +29,8 @@ export namespace Utils
         let y = Math.floor((index / width))
         return new vec2(x,y)
     }
-    export function coordToIndex (x:number,y:number,width:number)
+    export function coordToIndex (x:number,y:number, width:number)
     {
-        
         return x+y*width
     }
     export function clamp (val:number,min:number,max:number)

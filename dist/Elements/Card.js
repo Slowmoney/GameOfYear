@@ -24,6 +24,9 @@ export default class Card extends Entity {
     draw() {
         this.engine.ctx.save();
         if (!this.hide) {
+            this.engine.ctx.translate(this.translate.x, this.translate.y);
+            this.engine.ctx.scale(this.scale.x, this.scale.y);
+            this.engine.ctx.stroke(this.card);
             this.engine.ctx.beginPath();
             const healthSprite = Sprite.all.get('health');
             healthSprite.offset.x = 0;
@@ -65,26 +68,17 @@ export default class Card extends Entity {
             this.engine.ctx.fillStyle = "#fff";
             this.engine.ctx.textAlign = "center";
             this.engine.ctx.fillText(this.armor + "", armorPos.x - shieldSprite.size.x / 2, armorPos.y + shieldSprite.size.y / 2 + 3);
-            const playerSprite = Sprite.all.get('poo');
-            playerSprite.draw();
             this.engine.ctx.closePath();
         }
         //this.engine.ctx.translate(100-(this.width/2*this.counter), 0);
-        //this.engine.ctx.scale(this.counter,1);
         this.backGround && this.drawBackGround();
+        this.engine.ctx.scale(1, 1);
         this.engine.ctx.restore();
     }
     update(utime) {
         if (this.backGround)
             this.backGround.update(utime);
-        this.animation.render(this, utime);
-        if (utime - this.time > this.duration) {
-            this.time = utime;
-            this.counter += 1;
-            if (this.counter >= 100) {
-                this.counter = -1;
-            }
-        }
+        this.animation.forEach(e => e.render(this, utime));
     }
     drawBackGround() {
         this.card = new Path2D();
@@ -105,11 +99,12 @@ export default class Card extends Entity {
             frames.push([223, 295, 31, 32]);
             frames.push([253, 295, 32, 32]);
             this.backGround = Sprite.all.get('mega');
-            this.backGround.anim(frames, 88);
+            this.backGround.play(frames, 88);
         }
     }
     anim(name, duration) {
         console.log(name, duration);
+        this.animation.get(name).run();
     }
     click(e) {
         if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY))

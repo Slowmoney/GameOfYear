@@ -33,9 +33,9 @@ export default class Layout extends Entity implements IMenu
             if (!el) return
             const coord = Utils.indexToCoord(x, this.width)
             let pos = el.getPos()
-            el.animation.run()
-            el.animation.setFrames([[pos.x,pos.y,coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y]])
-            
+            el.animation.get("move").run()
+            el.animation.get("move").setFrames([[pos.x, pos.y, coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y]])
+
             if (x >= this.width * this.height) el.hide = true;
         });
     }
@@ -49,12 +49,12 @@ export default class Layout extends Entity implements IMenu
     update (utime: number)
     {
         this.elements.forEach((elm) => elm && elm.update(utime));
-        
+
     }
     protected click (target: Entity)
     {
         console.log(target);
-        
+
         const index = this.elements.findIndex(p => p == target)
         const playerIndex = this.elements.findIndex(e => e && e.name == "Player")
         const player = this.elements[playerIndex]
@@ -63,14 +63,11 @@ export default class Layout extends Entity implements IMenu
 
         const dir = clickCoord.sub(playerCoord)
         console.log(dir);
-        if (!dir.x&&!dir.y) return
-        if (dir.x>1) return
-        if (dir.y>1) return
-        if (dir.x == 1 && dir.y == 1 || dir.x == 1 && dir.y == -1 || dir.x == -1 && dir.y == -1 || dir.x == -1 && dir.y == 1) return
-        
+        if (!dir.x && !dir.y || dir.x > 1 || dir.y > 1 || dir.x == 1 && dir.y == 1 || dir.x == 1 && dir.y == -1 || dir.x == -1 && dir.y == -1 || dir.x == -1 && dir.y == 1) return this.playAnim("popup")
+
         const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)]
         this.move(player, attackTo)
-        
+
     }
     push (items: IElement[])
     {
@@ -99,11 +96,31 @@ export default class Layout extends Entity implements IMenu
             this.elements[index] = <IElement>target
             this.elements[playerIndex] = null
             this.updateLayout()
-            //
+
         } else
         {
             //this.move(target, to)
             console.log('check');
+
+        }
+    }
+    playAnim (animName: string)
+    {
+
+        if (animName = "popup")
+        {
+            const playerIndex = this.elements.findIndex(e => e && e.name == "Player")
+            const playerCoord = Utils.indexToCoord(playerIndex, this.width)
+
+            const fourCard = [
+                new vec2(0, -1).add(playerCoord),
+                new vec2(1, 0).add(playerCoord),
+                new vec2(0, 1).add(playerCoord),
+                new vec2(-1, 0).add(playerCoord),
+            ].filter(e => e.x >= 0 && e.y >= 0).map(e => Utils.coordToIndex(e.x, e.y, this.width))
+            console.log(fourCard);
+            
+            fourCard.forEach(e => this.elements[e].anim(animName, 10))
 
         }
     }

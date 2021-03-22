@@ -39,7 +39,7 @@ export default class Sprite extends Entity {
             }
         }
     }
-    anim(frames, duration) {
+    play(frames, duration) {
         this.animated = true;
         this.time = 0;
         this.frame = 0;

@@ -13,6 +13,12 @@ export default class vec2 {
         this.y -= v.y
         return this
     }
+    add (v:vec2)
+    {
+        this.x += v.x
+        this.y += v.y
+        return this
+    }
     clamp (min:number,max:number)
     {
         this.x = Utils.clamp(this.x, min, max)

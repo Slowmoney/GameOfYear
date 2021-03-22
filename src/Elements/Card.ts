@@ -31,7 +31,10 @@ export default class Card extends Entity implements IElement, IAnimated
         this.engine.ctx.save()
         if (!this.hide)
         {
-
+            this.engine.ctx.translate(this.translate.x, this.translate.y)
+            this.engine.ctx.scale(this.scale.x, this.scale.y)
+            
+            this.engine.ctx.stroke(this.card)
             this.engine.ctx.beginPath();
             const healthSprite = Sprite.all.get('health')
             healthSprite.offset.x = 0
@@ -79,33 +82,18 @@ export default class Card extends Entity implements IElement, IAnimated
             this.engine.ctx.textAlign = "center"
             this.engine.ctx.fillText(this.armor + "", armorPos.x - shieldSprite.size.x / 2, armorPos.y + shieldSprite.size.y / 2 + 3)
 
-            const playerSprite = Sprite.all.get('poo')
-            playerSprite.draw();
             this.engine.ctx.closePath();
         }
         //this.engine.ctx.translate(100-(this.width/2*this.counter), 0);
-        //this.engine.ctx.scale(this.counter,1);
 
         this.backGround && this.drawBackGround();
+        this.engine.ctx.scale(1,1);
         this.engine.ctx.restore()
     }
     update (utime: number)
     {
         if (this.backGround) this.backGround.update(utime);
-        this.animation.render(this, utime)
-        if (utime - this.time > this.duration)
-        {
-
-
-            this.time = utime;
-            this.counter += 1;
-            if (this.counter >= 100)
-            {
-
-
-                this.counter = -1
-            }
-        }
+        this.animation.forEach(e=>e.render(this, utime))
     }
     drawBackGround ()
     {
@@ -130,12 +118,13 @@ export default class Card extends Entity implements IElement, IAnimated
             frames.push([223, 295, 31, 32]);
             frames.push([253, 295, 32, 32]);
             this.backGround = Sprite.all.get('mega');
-            this.backGround.anim(frames, 88);
+            this.backGround.play(frames, 88);
         }
     }
     anim (name: string, duration: number)
     {
         console.log(name, duration);
+        this.animation.get(name).run()
     }
     protected click (e: MouseEvent)
     {

@@ -14,7 +14,7 @@ export default class Player extends Entity implements IElement, IAnimated
     time: number = 0;
     counter = 99;
 
-    health = 130
+    health = 60
     card: Path2D = new Path2D()
 
     constructor(engine: IEngine, size: vec2);
@@ -39,6 +39,7 @@ export default class Player extends Entity implements IElement, IAnimated
         this.engine.ctx.save()
         if (!this.hide)
         {
+            //this.engine.ctx.scale(this.scale.x, this.scale.y)
             //this.card.rect(this.x + this.offset.x, this.y + this.offset.y, this.width, this.height)
             this.engine.ctx.stroke(this.card)
 
@@ -104,6 +105,7 @@ export default class Player extends Entity implements IElement, IAnimated
         //this.engine.ctx.scale(this.counter,1);
 
         this.backGround && this.drawBackGround();
+        this.engine.ctx.scale(1,1);
         this.engine.ctx.restore()
     }
     update (utime: number)
@@ -111,21 +113,7 @@ export default class Player extends Entity implements IElement, IAnimated
         if (this.backGround) this.backGround.update(utime);
         this.card = new Path2D()
         this.card.rect(this.x, this.y, this.width, this.height)
-        this.animation.render(this, utime)
-        if (utime - this.time > this.duration)
-        {
-
-            this.time = utime;
-            this.counter += 1;
-            if (this.counter >= 100)
-            {
-
-
-                this.card = new Path2D()
-                this.card.rect(this.x, this.y, this.width, this.height)
-                this.counter = -1
-            }
-        }
+        this.animation.forEach(e=>e.render(this, utime))
     }
     protected drawBackGround ()
     {
@@ -136,23 +124,15 @@ export default class Player extends Entity implements IElement, IAnimated
     {
         if (!this.backGround)
         {
-            /*             const frames: [sx: number, sy: number, w: number, h: number][] = [];
-                        frames.push([0, 295, 32, 32]);
-                        frames.push([32, 295, 34, 32]);
-                        frames.push([65, 295, 32, 31]);
-                        frames.push([96, 295, 32, 32]);
-                        frames.push([125, 295, 32, 32]);
-                        frames.push([156, 295, 34, 32]);
-                        frames.push([190, 295, 32, 32]);
-                        frames.push([223, 295, 31, 32]);
-                        frames.push([253, 295, 32, 32]);
-                        this.backGround = Sprite.all.get('mega');
-                        this.backGround.anim(frames, 88); */
+
         }
     }
-    protected anim (name: string, duration: number)
+    anim (name: string, duration: number)
     {
         console.log(name, duration);
+        if (name == "popup") {
+            this.animation
+        }
     }
     protected click (e: MouseEvent)
     {
@@ -168,7 +148,6 @@ export default class Player extends Entity implements IElement, IAnimated
         if (!to) return true
 
         let tempAttack = this.health + this.armor
-
         let tempHealth = to.health
         let tempArmor = to.armor
 
@@ -183,7 +162,6 @@ export default class Player extends Entity implements IElement, IAnimated
         }
 
         tempAttack = tempHealth+tempArmor
-
         this.armor -= tempAttack
         tempAttack = this.armor < 0 ? Math.abs(this.armor) : 0
         if (this.armor < 0) this.armor = 0
@@ -195,10 +173,6 @@ export default class Player extends Entity implements IElement, IAnimated
         }
 
         if (to.health > 0 || this.health <= 0) return false
-
-
-
-
         return true
     }
     destroy ()

@@ -8,7 +8,7 @@ export default class Player extends Entity {
         this.hide = false;
         this.time = 0;
         this.counter = 99;
-        this.health = 130;
+        this.health = 60;
         this.card = new Path2D();
         if (typeof width == "number")
             this.width = width;
@@ -27,6 +27,7 @@ export default class Player extends Entity {
     draw() {
         this.engine.ctx.save();
         if (!this.hide) {
+            //this.engine.ctx.scale(this.scale.x, this.scale.y)
             //this.card.rect(this.x + this.offset.x, this.y + this.offset.y, this.width, this.height)
             this.engine.ctx.stroke(this.card);
             this.engine.ctx.beginPath();
@@ -80,6 +81,7 @@ export default class Player extends Entity {
         //this.engine.ctx.translate(100-(this.width/2*this.counter), 0);
         //this.engine.ctx.scale(this.counter,1);
         this.backGround && this.drawBackGround();
+        this.engine.ctx.scale(1, 1);
         this.engine.ctx.restore();
     }
     update(utime) {
@@ -87,16 +89,7 @@ export default class Player extends Entity {
             this.backGround.update(utime);
         this.card = new Path2D();
         this.card.rect(this.x, this.y, this.width, this.height);
-        this.animation.render(this, utime);
-        if (utime - this.time > this.duration) {
-            this.time = utime;
-            this.counter += 1;
-            if (this.counter >= 100) {
-                this.card = new Path2D();
-                this.card.rect(this.x, this.y, this.width, this.height);
-                this.counter = -1;
-            }
-        }
+        this.animation.forEach(e => e.render(this, utime));
     }
     drawBackGround() {
         this.backGround.setPos(this.x, this.y);
@@ -104,22 +97,13 @@ export default class Player extends Entity {
     }
     loadBackGround() {
         if (!this.backGround) {
-            /*             const frames: [sx: number, sy: number, w: number, h: number][] = [];
-                        frames.push([0, 295, 32, 32]);
-                        frames.push([32, 295, 34, 32]);
-                        frames.push([65, 295, 32, 31]);
-                        frames.push([96, 295, 32, 32]);
-                        frames.push([125, 295, 32, 32]);
-                        frames.push([156, 295, 34, 32]);
-                        frames.push([190, 295, 32, 32]);
-                        frames.push([223, 295, 31, 32]);
-                        frames.push([253, 295, 32, 32]);
-                        this.backGround = Sprite.all.get('mega');
-                        this.backGround.anim(frames, 88); */
         }
     }
     anim(name, duration) {
         console.log(name, duration);
+        if (name == "popup") {
+            this.animation;
+        }
     }
     click(e) {
         if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY))

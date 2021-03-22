@@ -9,6 +9,11 @@ export default class vec2 {
         this.y -= v.y;
         return this;
     }
+    add(v) {
+        this.x += v.x;
+        this.y += v.y;
+        return this;
+    }
     clamp(min, max) {
         this.x = Utils.clamp(this.x, min, max);
         this.y = Utils.clamp(this.y, min, max);

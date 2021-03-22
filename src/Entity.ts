@@ -1,7 +1,9 @@
-import { Anim } from "./Animation/Animation.js";
+import Anim from "./Animation/Anim.js";
+import { Move } from "./Animation/Move.js";
+import { PopUp } from "./Animation/PopUp.js";
 import { AnimationType, IAnimated, IEngine } from "./types";
 import EventEmmiter from "./utils/eventEmmiter.js";
-import vec2 from "./utils/vec2";
+import vec2 from "./utils/vec2.js";
 
 export default class Entity extends EventEmmiter implements IAnimated
 {
@@ -10,18 +12,25 @@ export default class Entity extends EventEmmiter implements IAnimated
     protected y: number = 0;
     protected width: number;
     protected height: number;
+
+    translate = new vec2(0,0)
+    scale = new vec2(1,1)
+
     health = 30
 
     armor = 15
 
     time = 10
     duration = 100
-    animation = new Anim(100)
+    animation = new Map<string,Anim>()
     constructor(engine: IEngine)
     {
         super()
         this.engine = engine;
         
+
+        this.animation.set("move", new Move(100))
+        this.animation.set("popup", new PopUp(1000))
     }
     setPos (x: number, y: number)
     {
@@ -56,5 +65,9 @@ export default class Entity extends EventEmmiter implements IAnimated
     destroy ()
     {
         
+    }
+    anim (name: string, duration: number)
+    {
+        console.log(name, duration);
     }
 }

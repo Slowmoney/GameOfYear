@@ -48,7 +48,7 @@ export default class Sprite extends Entity implements IElement {
             }
         }
     }
-    anim(frames: [sx: number, sy: number, w: number, h: number][], duration: number) {
+    play(frames: [sx: number, sy: number, w: number, h: number][], duration: number) {
         this.animated = true;
         this.time = 0;
         this.frame = 0;
