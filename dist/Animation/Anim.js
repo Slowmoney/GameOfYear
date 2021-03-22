@@ -21,6 +21,8 @@ export default class Anim {
         return false;
     }
     run() {
+        if (this.isRun)
+            return;
         this.firstRun = true;
         this.isRun = true;
     }

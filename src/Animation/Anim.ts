@@ -29,6 +29,7 @@ export default class Anim
     }
     run ()
     {
+        if (this.isRun) return
         this.firstRun = true
         this.isRun = true
     }
