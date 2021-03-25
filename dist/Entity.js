@@ -14,6 +14,7 @@ export default class Entity extends EventEmmiter {
         this.time = 10;
         this.duration = 100;
         this.animation = new Map();
+        this.collsionBox = new Path2D();
         this.engine = engine;
         this.animation.set("move", new Move(100));
         this.animation.set("popup", new PopUp(500));
@@ -21,6 +22,7 @@ export default class Entity extends EventEmmiter {
     setPos(x, y) {
         this.x = x;
         this.y = y;
+        this.updateCollisionBox();
     }
     getPos() {
         return { x: this.x, y: this.y };
@@ -30,12 +32,14 @@ export default class Entity extends EventEmmiter {
     }
     setWidth(width) {
         this.width = width;
+        this.updateCollisionBox();
     }
     getHeight() {
         return this.height;
     }
     setHeight(height) {
         this.height = height;
+        this.updateCollisionBox();
     }
     action(to) {
         to;
@@ -45,5 +49,9 @@ export default class Entity extends EventEmmiter {
     }
     anim(name, duration) {
         console.log(name, duration);
+    }
+    updateCollisionBox() {
+        this.collsionBox = new Path2D();
+        this.collsionBox.rect(this.x, this.y, this.width, this.height);
     }
 }

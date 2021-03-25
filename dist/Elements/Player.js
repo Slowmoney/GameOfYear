@@ -4,17 +4,17 @@ import Sprite from './Sprite.js';
 export default class Player extends Entity {
     constructor(engine, width, height) {
         super(engine);
-        this.name = "Player";
+        this.name = 'Player';
         this.hide = false;
         this.time = 0;
         this.counter = 99;
         this.health = 140;
         this.card = new Path2D();
-        if (typeof width == "number")
+        if (typeof width == 'number')
             this.width = width;
-        if (typeof height == "number")
+        if (typeof height == 'number')
             this.height = height;
-        if (typeof width == "object") {
+        if (typeof width == 'object') {
             this.width = width.x;
             this.height = width.y;
         }
@@ -22,7 +22,7 @@ export default class Player extends Entity {
         this.loadBackGround();
         /* this.engine.on('mousemove', this.mousemove.bind(this)) */
         this.click = this.click.bind(this);
-        this.engine.on("click", this.click);
+        this.engine.on('click', this.click);
     }
     draw() {
         this.engine.ctx.save();
@@ -34,14 +34,14 @@ export default class Player extends Entity {
             const healthSprite = Sprite.all.get('health');
             healthSprite.offset.x = 0;
             healthSprite.offset.y = 0;
-            healthSprite.setWidth(254);
-            healthSprite.setHeight(254);
-            healthSprite.size = new vec2(24, 24);
-            healthSprite.setPos(this.x + this.width - healthSprite.size.x, this.y + this.height - healthSprite.size.y);
+            healthSprite.setWidth(24);
+            healthSprite.setHeight(24);
+            healthSprite.size = new vec2(254, 254);
+            healthSprite.setPos(this.x + this.getWidth() - healthSprite.getWidth(), this.y + this.getHeight() - healthSprite.getHeight());
             healthSprite.draw();
-            this.engine.ctx.fillStyle = "#fff";
-            this.engine.ctx.textAlign = "center";
-            this.engine.ctx.fillText(this.health + "", this.x + this.width - healthSprite.size.x / 2, this.y + this.height - healthSprite.size.y / 2 + 2);
+            this.engine.ctx.fillStyle = '#fff';
+            this.engine.ctx.textAlign = 'center';
+            this.engine.ctx.fillText(this.health + '', this.x + this.width - healthSprite.getWidth() / 2, this.y + this.height - healthSprite.getHeight() / 2 + 2);
             this.engine.ctx.closePath();
             //armor circle stat
             const armorPos = new vec2(this.x + this.width, this.y);
@@ -54,15 +54,15 @@ export default class Player extends Entity {
             shieldSprite.size = new vec2(24, 24);
             shieldSprite.setPos(this.x + this.width - shieldSprite.getWidth(), this.y);
             shieldSprite.draw();
-            this.engine.ctx.fillStyle = "#fff";
-            this.engine.ctx.textAlign = "center";
-            this.engine.ctx.fillText(this.armor + "", armorPos.x - shieldSprite.size.x / 2, armorPos.y + shieldSprite.size.y / 2 + 3);
+            this.engine.ctx.fillStyle = '#fff';
+            this.engine.ctx.textAlign = 'center';
+            this.engine.ctx.fillText(this.armor + '', armorPos.x - shieldSprite.size.x / 2, armorPos.y + shieldSprite.size.y / 2 + 3);
             const playerSprite = Sprite.all.get('poo');
+            playerSprite.setWidth(9 * 10 - 30);
+            playerSprite.setHeight(playerSprite.aspecеRatio * playerSprite.getWidth());
+            playerSprite.setPos(this.x + (this.getWidth() - playerSprite.getWidth()) / 2, this.y + 30);
             playerSprite.draw();
             this.engine.ctx.closePath();
-            playerSprite.size.x = 9 * 10 - 30;
-            playerSprite.size.y = playerSprite.aspecеRatio * playerSprite.size.x;
-            playerSprite.setPos((this.x) + (this.width - playerSprite.size.x) / 2, this.y + 30);
         }
         //this.engine.ctx.translate(100-(this.width/2*this.counter), 0);
         //this.engine.ctx.scale(this.counter,1);
@@ -75,7 +75,7 @@ export default class Player extends Entity {
             this.backGround.update(utime);
         this.card = new Path2D();
         this.card.rect(this.x, this.y, this.width, this.height);
-        this.animation.forEach(e => e.render(this, utime));
+        this.animation.forEach((e) => e.render(this, utime));
     }
     drawBackGround() {
         this.backGround.setPos(this.x, this.y);
@@ -87,7 +87,7 @@ export default class Player extends Entity {
     }
     anim(name, duration) {
         console.log(name, duration);
-        if (name == "popup") {
+        if (name == 'popup') {
             this.animation;
         }
     }
@@ -129,6 +129,6 @@ export default class Player extends Entity {
         return true;
     }
     destroy() {
-        this.engine.off("click", this.click);
+        this.engine.off('click', this.click);
     }
 }

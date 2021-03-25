@@ -9,7 +9,7 @@ export default class Card extends Entity implements IElement, IAnimated {
 	backGround: Sprite;
 	time: number = 0;
 	counter = 99;
-	card: Path2D = new Path2D();
+
 	constructor(engine: IEngine, size: vec2);
 	constructor(engine: IEngine, width: number | vec2, height?: number) {
 		super(engine);
@@ -44,23 +44,26 @@ export default class Card extends Entity implements IElement, IAnimated {
 			);
 			this.engine.ctx.scale(this.scale.x, this.scale.y);
 
-			this.engine.ctx.stroke(this.card);
+			this.engine.ctx.stroke(this.collsionBox);
 			this.engine.ctx.beginPath();
 			const healthSprite = Sprite.all.get('health');
 			healthSprite.offset.x = 0;
 			healthSprite.offset.y = 0;
-			healthSprite.setWidth(254);
-			healthSprite.setHeight(254);
-			healthSprite.size = new vec2(24, 24);
-			healthSprite.setPos(this.x + this.width - healthSprite.size.x, this.y + this.height - healthSprite.size.y);
+			healthSprite.setWidth(24);
+			healthSprite.setHeight(24);
+			healthSprite.size = new vec2(254, 254);
+			healthSprite.setPos(
+				this.x + this.getWidth() - healthSprite.getWidth(),
+				this.y + this.getHeight() - healthSprite.getHeight()
+			);
 			healthSprite.draw();
 
 			this.engine.ctx.fillStyle = '#fff';
 			this.engine.ctx.textAlign = 'center';
 			this.engine.ctx.fillText(
 				this.health + '',
-				this.x + this.width - healthSprite.size.x / 2,
-				this.y + this.height - healthSprite.size.y / 2 + 2
+				this.x + this.width - healthSprite.getWidth() / 2,
+				this.y + this.height - healthSprite.getHeight() / 2 + 2
 			);
 
 			this.engine.ctx.closePath();
@@ -98,8 +101,7 @@ export default class Card extends Entity implements IElement, IAnimated {
 		this.animation.forEach((e) => e.render(this, utime));
 	}
 	drawBackGround() {
-		this.card = new Path2D();
-		this.card.rect(this.x, this.y, this.width, this.height);
+		this.updateCollisionBox()
 
 		this.backGround.setPos(
 			this.x + this.width / 2 - this.backGround.width / 2,
@@ -124,11 +126,10 @@ export default class Card extends Entity implements IElement, IAnimated {
 		}
 	}
 	anim(name: string, duration: number) {
-		console.log(name, duration);
 		this.animation.get(name).run();
 	}
 	protected click(e: MouseEvent) {
-		if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)) this.emit('click', this);
+		if (this.engine.ctx.isPointInPath(this.collsionBox, e.offsetX, e.offsetY)) this.emit('click', this);
 	}
 	destroy() {
 		this.engine.off('click', this.click);

@@ -7,4 +7,4 @@ class main {
         this.game = new Game(this.engine);
     }
 }
-new main();
+Object.defineProperty(window, "game", { value: new main() });

@@ -16,8 +16,6 @@ export class PopUp extends Anim {
         entity.scale.x = scale;
         entity.scale.y = scale;
         if (time - this.step > this.maxStep) {
-            console.log(time, this.step);
-            console.log(entity.scale);
             if (this.isRun)
                 this.step = time;
             this.isRun = false;

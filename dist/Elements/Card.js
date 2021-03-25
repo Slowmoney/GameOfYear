@@ -8,7 +8,6 @@ export default class Card extends Entity {
         this.hide = false;
         this.time = 0;
         this.counter = 99;
-        this.card = new Path2D();
         if (typeof width == 'number')
             this.width = width;
         if (typeof height == 'number')
@@ -37,19 +36,19 @@ export default class Card extends Entity {
                 (this.height * this.scale.y) / 2 -
                 this.height / 2);
             this.engine.ctx.scale(this.scale.x, this.scale.y);
-            this.engine.ctx.stroke(this.card);
+            this.engine.ctx.stroke(this.collsionBox);
             this.engine.ctx.beginPath();
             const healthSprite = Sprite.all.get('health');
             healthSprite.offset.x = 0;
             healthSprite.offset.y = 0;
-            healthSprite.setWidth(254);
-            healthSprite.setHeight(254);
-            healthSprite.size = new vec2(24, 24);
-            healthSprite.setPos(this.x + this.width - healthSprite.size.x, this.y + this.height - healthSprite.size.y);
+            healthSprite.setWidth(24);
+            healthSprite.setHeight(24);
+            healthSprite.size = new vec2(254, 254);
+            healthSprite.setPos(this.x + this.getWidth() - healthSprite.getWidth(), this.y + this.getHeight() - healthSprite.getHeight());
             healthSprite.draw();
             this.engine.ctx.fillStyle = '#fff';
             this.engine.ctx.textAlign = 'center';
-            this.engine.ctx.fillText(this.health + '', this.x + this.width - healthSprite.size.x / 2, this.y + this.height - healthSprite.size.y / 2 + 2);
+            this.engine.ctx.fillText(this.health + '', this.x + this.width - healthSprite.getWidth() / 2, this.y + this.height - healthSprite.getHeight() / 2 + 2);
             this.engine.ctx.closePath();
             //armor circle stat
             const armorPos = new vec2(this.x + this.width, this.y);
@@ -78,8 +77,7 @@ export default class Card extends Entity {
         this.animation.forEach((e) => e.render(this, utime));
     }
     drawBackGround() {
-        this.card = new Path2D();
-        this.card.rect(this.x, this.y, this.width, this.height);
+        this.updateCollisionBox();
         this.backGround.setPos(this.x + this.width / 2 - this.backGround.width / 2, this.y + this.height / 2 - this.backGround.height / 2);
         this.backGround.draw();
     }
@@ -100,11 +98,10 @@ export default class Card extends Entity {
         }
     }
     anim(name, duration) {
-        console.log(name, duration);
         this.animation.get(name).run();
     }
     click(e) {
-        if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY))
+        if (this.engine.ctx.isPointInPath(this.collsionBox, e.offsetX, e.offsetY))
             this.emit('click', this);
     }
     destroy() {

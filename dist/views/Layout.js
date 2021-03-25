@@ -5,6 +5,7 @@ export default class Layout extends Entity {
     constructor(engine, width, height, elements = []) {
         super(engine);
         this.gap = new vec2(0, 0);
+        this.name = 'Layout';
         this.width = width;
         this.height = height;
         this.elements = elements;
@@ -38,14 +39,12 @@ export default class Layout extends Entity {
         this.elements.forEach((elm) => elm && elm.update(utime));
     }
     click(target) {
-        console.log(target);
         const index = this.elements.findIndex(p => p == target);
         const playerIndex = this.elements.findIndex(e => e && e.name == "Player");
         const player = this.elements[playerIndex];
         const clickCoord = Utils.indexToCoord(index, this.width);
         const playerCoord = Utils.indexToCoord(playerIndex, this.width);
         const dir = clickCoord.sub(playerCoord);
-        console.log(dir);
         if (!dir.x && !dir.y || dir.x > 1 || dir.y > 1 || dir.x == 1 && dir.y == 1 || dir.x == 1 && dir.y == -1 || dir.x == -1 && dir.y == -1 || dir.x == -1 && dir.y == 1)
             return this.playAnim("popup");
         const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)];
@@ -74,6 +73,7 @@ export default class Layout extends Entity {
         else {
             //this.move(target, to)
             console.log('check');
+            this.emit("toView", "GameOver");
         }
     }
     playAnim(animName) {

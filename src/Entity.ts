@@ -22,7 +22,9 @@ export default class Entity extends EventEmmiter implements IAnimated
 
     time = 10
     duration = 100
-    animation = new Map<string,Anim>()
+    animation = new Map<string, Anim>()
+    
+    collsionBox: Path2D = new Path2D();
     constructor(engine: IEngine)
     {
         super()
@@ -36,6 +38,7 @@ export default class Entity extends EventEmmiter implements IAnimated
     {
         this.x = x;
         this.y = y;
+        this.updateCollisionBox()
     }
     getPos ()
     {
@@ -48,6 +51,7 @@ export default class Entity extends EventEmmiter implements IAnimated
     setWidth (width: number)
     {
         this.width = width
+        this.updateCollisionBox()
     }
     getHeight ()
     {
@@ -56,6 +60,7 @@ export default class Entity extends EventEmmiter implements IAnimated
     setHeight (height: number)
     {
         this.height = height
+        this.updateCollisionBox()
     }
     action (to: Entity)
     {
@@ -69,5 +74,10 @@ export default class Entity extends EventEmmiter implements IAnimated
     anim (name: string, duration: number)
     {
         console.log(name, duration);
+    }
+    updateCollisionBox ()
+    {
+        this.collsionBox = new Path2D();
+		this.collsionBox.rect(this.x, this.y, this.width, this.height);
     }
 }

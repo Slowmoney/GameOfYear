@@ -8,6 +8,7 @@ export interface IEngine extends EventEmmiter {
 }
 export interface IMenu extends EventEmmiter
 {
+    readonly name:string
     push:(items: IElement[])=>number
     draw: () => void;
     update: (utime: number) => void;

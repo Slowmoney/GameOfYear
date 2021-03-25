@@ -10,7 +10,7 @@ export default class Layout extends Entity implements IMenu
     elements: IElement[];
     engine: IEngine;
     gap: vec2 = new vec2(0, 0);
-
+    name = 'Layout'
     constructor(engine: IEngine, width: number, height: number, elements: IElement[] = [])
     {
         super(engine);
@@ -53,18 +53,13 @@ export default class Layout extends Entity implements IMenu
     }
     protected click (target: Entity)
     {
-        console.log(target);
-
         const index = this.elements.findIndex(p => p == target)
         const playerIndex = this.elements.findIndex(e => e && e.name == "Player")
         const player = this.elements[playerIndex]
         const clickCoord = Utils.indexToCoord(index, this.width)
         const playerCoord = Utils.indexToCoord(playerIndex, this.width)
-
         const dir = clickCoord.sub(playerCoord)
-        console.log(dir);
         if (!dir.x && !dir.y || dir.x > 1 || dir.y > 1 || dir.x == 1 && dir.y == 1 || dir.x == 1 && dir.y == -1 || dir.x == -1 && dir.y == -1 || dir.x == -1 && dir.y == 1) return this.playAnim("popup")
-
         const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)]
         this.move(player, attackTo)
 
@@ -101,7 +96,7 @@ export default class Layout extends Entity implements IMenu
         {
             //this.move(target, to)
             console.log('check');
-
+            this.emit("toView","GameOver")
         }
     }
     playAnim (animName: string)

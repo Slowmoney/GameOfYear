@@ -12,14 +12,15 @@ export default class Sprite extends Entity {
         this.size = new vec2(0, 0);
         this.image = image;
         this.name = name;
-        this.width = image.width;
-        this.height = image.height;
+        this.setWidth(image.width);
+        this.setHeight(image.height);
         this.aspecеRatio = image.height / image.width;
         this.size = new vec2(this.width, this.height);
         Sprite.all.set(this.name, this);
     }
     draw() {
-        this.engine.ctx.drawImage(this.image, this.offset.x, this.offset.y, this.width, this.height, this.x, this.y, this.size.x, this.size.y);
+        this.engine.ctx.stroke(this.collsionBox);
+        this.engine.ctx.drawImage(this.image, this.offset.x, this.offset.y, this.size.x, this.size.y, this.x, this.y, this.width, this.height);
     }
     update(utime) {
         if (utime - this.time > this.duration) {
@@ -33,9 +34,9 @@ export default class Sprite extends Entity {
                     return;
                 this.offset.x = frame[0];
                 this.offset.y = frame[1];
+                this.size = new vec2(frame[2], frame[3]);
                 this.width = frame[2];
                 this.height = frame[3];
-                this.size = new vec2(this.width, this.height);
             }
         }
     }
