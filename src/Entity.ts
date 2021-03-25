@@ -69,6 +69,7 @@ export default class Entity extends EventEmmiter implements IAnimated
     }
     destroy ()
     {
+        console.log("destroy", this);
         
     }
     anim (name: string, duration: number)

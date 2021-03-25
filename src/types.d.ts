@@ -13,6 +13,7 @@ export interface IMenu extends EventEmmiter
     draw: () => void;
     update: (utime: number) => void;
     elements: IElement[];
+    destroy: ()=>void
 }
 export interface IContainer {
     getWidth: () => number

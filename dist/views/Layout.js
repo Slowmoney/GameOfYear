@@ -9,6 +9,7 @@ export default class Layout extends Entity {
         this.width = width;
         this.height = height;
         this.elements = elements;
+        this.click = this.click.bind(this);
         this.updateLayout();
         this.push(elements);
     }
@@ -51,9 +52,7 @@ export default class Layout extends Entity {
         this.move(player, attackTo);
     }
     push(items) {
-        items.forEach((e) => {
-            e.on("click", this.click.bind(this));
-        });
+        items.map((e) => e.on("click", this.click));
         this.elements.push(...items);
         this.updateLayout();
         return this.elements.length;
@@ -66,6 +65,7 @@ export default class Layout extends Entity {
         if (actionResult) {
             const index = this.elements.findIndex(p => p == to);
             const playerIndex = this.elements.findIndex(e => e == target);
+            this.elements[index].destroy();
             this.elements[index] = target;
             this.elements[playerIndex] = null;
             this.updateLayout();
@@ -89,5 +89,9 @@ export default class Layout extends Entity {
             console.log(fourCard);
             fourCard.forEach(e => this.elements[e] && this.elements[e].anim(animName, 10));
         }
+    }
+    destroy() {
+        this.elements.forEach(e => e && e.destroy());
+        this.elements = [];
     }
 }

@@ -63,7 +63,7 @@ export default class Game extends EventEmmiter {
         requestAnimationFrame(this.update);
     }
     changeView(name) {
-        console.log(this, name);
+        this.views[this.selectedViewIndex].destroy();
         this.selectedView = name;
         this.selectedViewIndex = this.views.findIndex(e => e.name == name);
         if (this.selectedViewIndex == -1) {

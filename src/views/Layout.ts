@@ -17,8 +17,10 @@ export default class Layout extends Entity implements IMenu
         this.width = width;
         this.height = height;
         this.elements = elements;
+        this.click = this.click.bind(this);
         this.updateLayout();
         this.push(elements)
+
     }
     setGap (x: number, y: number)
     {
@@ -67,10 +69,7 @@ export default class Layout extends Entity implements IMenu
     push (items: IElement[])
     {
 
-        items.forEach((e) =>
-        {
-            e.on("click", this.click.bind(this))
-        })
+        items.map((e) =>e.on("click", this.click))
         this.elements.push(...items)
         this.updateLayout()
         return this.elements.length
@@ -88,6 +87,7 @@ export default class Layout extends Entity implements IMenu
         {
             const index = this.elements.findIndex(p => p == to)
             const playerIndex = this.elements.findIndex(e => e == target)
+            this.elements[index].destroy()
             this.elements[index] = <IElement>target
             this.elements[playerIndex] = null
             this.updateLayout()
@@ -114,10 +114,13 @@ export default class Layout extends Entity implements IMenu
                 new vec2(-1, 0).add(playerCoord),
             ].filter(e => e.x >= 0 && e.y >= 0).map(e => Utils.coordToIndex(e.x, e.y, this.width))
             console.log(fourCard);
-            
             fourCard.forEach(e => this.elements[e]&&this.elements[e].anim(animName, 10))
-
         }
+    }
+    destroy ()
+    {
+        this.elements.forEach(e => e && e.destroy())
+        this.elements = []
     }
 }
 

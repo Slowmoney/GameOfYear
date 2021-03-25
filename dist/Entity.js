@@ -46,6 +46,7 @@ export default class Entity extends EventEmmiter {
         return true;
     }
     destroy() {
+        console.log("destroy", this);
     }
     anim(name, duration) {
         console.log(name, duration);

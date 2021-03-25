@@ -4,7 +4,7 @@ import EventEmmiter from '../utils/eventEmmiter.js';
 
 export class MainMenu extends EventEmmiter implements IMenu {
 	engine: IEngine;
-	elements: IElement[];
+	elements: IElement[]=[];
 	name = 'MainMenu';
 	constructor(engine: IEngine) {
 		super();
@@ -13,7 +13,7 @@ export class MainMenu extends EventEmmiter implements IMenu {
 		this.engine.on('click', this.click);
 	}
 	push(items: IElement[]) {
-		items.forEach((e) => e.on('click', this.click.bind(this)));
+		items.forEach((e) => e.on('click', this.click));
 		this.elements.push(...items);
 		return this.elements.length;
 	}
@@ -30,5 +30,6 @@ export class MainMenu extends EventEmmiter implements IMenu {
         {
             this.emit('toView', "Layout");
         } 
-	}
+    }
+    destroy(){}
 }

@@ -3,13 +3,14 @@ import EventEmmiter from '../utils/eventEmmiter.js';
 export class MainMenu extends EventEmmiter {
     constructor(engine) {
         super();
+        this.elements = [];
         this.name = 'MainMenu';
         this.engine = engine;
         this.click = this.click.bind(this);
         this.engine.on('click', this.click);
     }
     push(items) {
-        items.forEach((e) => e.on('click', this.click.bind(this)));
+        items.forEach((e) => e.on('click', this.click));
         this.elements.push(...items);
         return this.elements.length;
     }
@@ -25,4 +26,5 @@ export class MainMenu extends EventEmmiter {
             this.emit('toView', "Layout");
         }
     }
+    destroy() { }
 }

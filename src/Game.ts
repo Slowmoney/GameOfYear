@@ -34,7 +34,6 @@ export default class Game extends EventEmmiter
         ];
         this.changeView = this.changeView.bind(this)
 
-
         this.views.push(new MainMenu(this.engine))
         this.views.push(new Layout(this.engine, 3, 3).setGap(10, 10))
         
@@ -87,13 +86,12 @@ export default class Game extends EventEmmiter
 
     changeView (name:string)
     {
-        console.log(this, name);
+        this.views[this.selectedViewIndex].destroy()
         this.selectedView = name;
         this.selectedViewIndex = this.views.findIndex(e => e.name == name)
         if (this.selectedViewIndex==-1) {
             this.selectedViewIndex = 0;
             console.error("NOT VIEW FOUND", name);
-            
         }
         
     }
