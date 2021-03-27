@@ -6,6 +6,7 @@ import { IElement, IMenu, ISpriteUrl } from './types.js';
 import EventEmmiter from './utils/eventEmmiter.js';
 import { spriteLoader } from './utils/spriteLoader.js';
 import vec2 from './utils/vec2.js';
+import { GameOver } from './views/GameOver.js';
 import Layout from './views/Layout.js';
 import { MainMenu } from './views/MainMenu.js';
 
@@ -36,7 +37,7 @@ export default class Game extends EventEmmiter
 
         this.views.push(new MainMenu(this.engine))
         this.views.push(new Layout(this.engine, 3, 3).setGap(10, 10))
-        
+        this.views.push(new GameOver(this.engine))
         this.views.forEach(view => {
             view.on("toView", this.changeView)
         });
@@ -57,6 +58,8 @@ export default class Game extends EventEmmiter
     update (utime: number)
     {
         this.engine.ctx.clearRect(0, 0, this.engine.el.width, this.engine.el.height);
+
+        this.engine.ctx.fillText(this.selectedView, 10, 10)
 
         this.views[this.selectedViewIndex].draw()
         this.views[this.selectedViewIndex].update(utime);
