@@ -1,6 +1,7 @@
 import Entity from "../Entity";
 import { Utils } from "../utils/utils.js";
 import Anim from "./Anim.js";
+import { Formula } from "./Formula.js";
 
 export class PopUp extends Anim
 {
@@ -17,6 +18,10 @@ export class PopUp extends Anim
             this.firstRun = false
         }
         let t = Utils.clamp(time - this.step, 0, this.maxStep) / this.maxStep
+
+        t = Formula.cubicBezier(t,0.1, -0.6, 0.2, 0)
+
+        
         let scale = Math.sin(t * Math.PI)/(10) + 1
         entity.scale.x = scale
         entity.scale.y = scale
