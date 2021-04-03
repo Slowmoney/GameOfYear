@@ -17,6 +17,8 @@ export default class Sprite extends Entity {
         this.aspecеRatio = image.height / image.width;
         this.size = new vec2(this.width, this.height);
         Sprite.all.set(this.name, this);
+        this.click = this.click.bind(this);
+        this.engine.on('click', this.click);
     }
     draw() {
         this.engine.ctx.stroke(this.collsionBox);
@@ -46,6 +48,10 @@ export default class Sprite extends Entity {
         this.frame = 0;
         this.frames.push(...frames);
         this.duration = duration;
+    }
+    click(e) {
+        if (this.engine.ctx.isPointInPath(this.collsionBox, e.offsetX, e.offsetY))
+            this.emit('click', this);
     }
 }
 Sprite.all = new Map();

@@ -1,3 +1,4 @@
+import { Formula } from '../Animation/Formula.js';
 import Entity from '../Entity.js';
 import vec2 from '../utils/vec2.js';
 import Sprite from './Sprite.js';
@@ -23,6 +24,7 @@ export default class Player extends Entity {
         /* this.engine.on('mousemove', this.mousemove.bind(this)) */
         this.click = this.click.bind(this);
         this.engine.on('click', this.click);
+        this.animation.get("move").setTimingFunc((t) => Formula.ease(t));
     }
     draw() {
         this.engine.ctx.save();

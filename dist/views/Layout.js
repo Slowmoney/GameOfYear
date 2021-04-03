@@ -24,11 +24,17 @@ export default class Layout extends Entity {
                 return;
             const coord = Utils.indexToCoord(x, this.width);
             let pos = el.getPos();
-            el.animation.get("move").run();
-            el.animation.get("move").setFrames([[pos.x, pos.y, coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y]]);
+            if (el.animation.get("move")) {
+                el.animation.get("move").run();
+                el.animation.get("move").setFrames([[pos.x, pos.y, coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y]]);
+            }
+            else {
+                el.setPos(coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y);
+            }
             if (x >= this.width * this.height)
                 el.hide = true;
         });
+        this.emit("update", this);
     }
     draw() {
         this.engine.ctx.save();
@@ -53,6 +59,9 @@ export default class Layout extends Entity {
     }
     push(items) {
         items.map((e) => e.on("click", this.click));
+        while (this.elements.findIndex(e => e == null) > -1 && items.length > 0) {
+            this.elements[this.elements.findIndex(e => e == null)] = items.pop();
+        }
         this.elements.push(...items);
         this.updateLayout();
         return this.elements.length;
@@ -61,6 +70,9 @@ export default class Layout extends Entity {
         return Utils.reshape(this.elements, this.width, this.height);
     }
     move(target, to) {
+        if (target.animation.get("move")?.isRun) {
+            return;
+        }
         const actionResult = target.action(to);
         if (actionResult) {
             const index = this.elements.findIndex(p => p == to);
@@ -68,6 +80,7 @@ export default class Layout extends Entity {
             this.elements[index].destroy();
             this.elements[index] = target;
             this.elements[playerIndex] = null;
+            target.animation.get("move")?.setDuration(1000);
             this.updateLayout();
         }
         else {

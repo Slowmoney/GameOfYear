@@ -1,6 +1,7 @@
 import Card from './Elements/Card.js';
 import Player from './Elements/Player.js';
 import Sprite from './Elements/Sprite.js';
+import { LevelGenerator } from './LevelGenerator.js';
 import EventEmmiter from './utils/eventEmmiter.js';
 import { spriteLoader } from './utils/spriteLoader.js';
 import vec2 from './utils/vec2.js';
@@ -50,6 +51,7 @@ export default class Game extends EventEmmiter {
         requestAnimationFrame(this.update);
     }
     main() {
+        const lvlGen = LevelGenerator.gen(3);
         const cardSize = new vec2(9 * 10, 16 * 10);
         const elemLayout = [
             new Card(this.engine, cardSize),
@@ -62,7 +64,25 @@ export default class Game extends EventEmmiter {
             new Card(this.engine, cardSize),
             new Card(this.engine, cardSize),
         ];
-        this.views.find(e => e.name == "Layout").push(elemLayout);
+        this.getView("Layout").push(elemLayout);
+        this.getView("Layout").on("update", (layout) => {
+            if (!layout.elements.every(Boolean)) {
+                console.log("addd");
+                const nullable = layout.elements.reduce((acc, c, i) => {
+                    if (c == null)
+                        acc.push(i);
+                    return acc;
+                }, []);
+                console.log(nullable);
+                console.log();
+                nullable.forEach(() => {
+                    const newCard = lvlGen.next().value;
+                    if (newCard) {
+                        layout.push([new newCard(this.engine, cardSize)]);
+                    }
+                });
+            }
+        });
         requestAnimationFrame(this.update);
     }
     changeView(name) {
@@ -73,5 +93,8 @@ export default class Game extends EventEmmiter {
             this.selectedViewIndex = 0;
             console.error("NOT VIEW FOUND", name);
         }
+    }
+    getView(name) {
+        return this.views.find(e => e.name == name);
     }
 }

@@ -2,6 +2,7 @@ import Card from './Elements/Card.js';
 import Player from './Elements/Player.js';
 import Sprite from './Elements/Sprite.js';
 import Engine from './Engine.js';
+import { LevelGenerator } from './LevelGenerator.js';
 import { IElement, IMenu, ISpriteUrl } from './types.js';
 import EventEmmiter from './utils/eventEmmiter.js';
 import { spriteLoader } from './utils/spriteLoader.js';
@@ -70,6 +71,7 @@ export default class Game extends EventEmmiter
 
     main ()
     {
+        const lvlGen = LevelGenerator.gen(3)
         const cardSize = new vec2(9 * 10, 16 * 10)
         const elemLayout = [
             new Card(this.engine, cardSize),
@@ -82,8 +84,28 @@ export default class Game extends EventEmmiter
             new Card(this.engine, cardSize),
             new Card(this.engine, cardSize),
         ]
-        this.views.find(e => e.name == "Layout").push(elemLayout)
-        
+        this.getView("Layout").push(elemLayout)
+        this.getView("Layout").on("update", (layout:IMenu) =>
+        {
+
+            if (!layout.elements.every(Boolean)) {
+                console.log("addd");
+                const nullable = layout.elements.reduce<number[]>((acc, c, i)=> {
+                    if (c == null) acc.push(i)
+                    return acc
+                }, [])
+                console.log(nullable);
+                console.log();
+                nullable.forEach(() =>
+                {
+                    const newCard = lvlGen.next().value
+                    if (newCard) {
+                        layout.push([new newCard(this.engine, cardSize) ])
+                    }
+                })
+            }
+            
+        })
         requestAnimationFrame(this.update);
     }
 
@@ -98,5 +120,8 @@ export default class Game extends EventEmmiter
         }
         
     }
-
+    getView (name:string)
+    {
+        return this.views.find(e => e.name == name)
+    }
 }

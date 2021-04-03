@@ -1,3 +1,4 @@
+import { Formula } from '../Animation/Formula.js';
 import Entity from '../Entity.js';
 import { IAnimated, IContainer, IElement, IEngine } from '../types';
 import vec2 from '../utils/vec2.js';
@@ -29,7 +30,9 @@ export default class Player extends Entity implements IElement, IAnimated {
 		this.loadBackGround();
 		/* this.engine.on('mousemove', this.mousemove.bind(this)) */
 		this.click = this.click.bind(this);
-		this.engine.on('click', this.click);
+        this.engine.on('click', this.click);
+        
+        this.animation.get("move").setTimingFunc((t:number)=>Formula.ease(t))
 	}
 	draw() {
 		this.engine.ctx.save();

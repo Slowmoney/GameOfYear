@@ -1,4 +1,5 @@
 import Anim from "./Animation/Anim.js";
+import { Formula } from "./Animation/Formula.js";
 import { Move } from "./Animation/Move.js";
 import { PopUp } from "./Animation/PopUp.js";
 import { AnimationType, IAnimated, IEngine } from "./types";
@@ -32,6 +33,7 @@ export default class Entity extends EventEmmiter implements IAnimated
         
 
         this.animation.set("move", new Move(100))
+
         this.animation.set("popup", new PopUp(500))
     }
     setPos (x: number, y: number)

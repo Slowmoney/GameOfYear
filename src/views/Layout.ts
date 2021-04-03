@@ -35,11 +35,18 @@ export default class Layout extends Entity implements IMenu
             if (!el) return
             const coord = Utils.indexToCoord(x, this.width)
             let pos = el.getPos()
-            el.animation.get("move").run()
-            el.animation.get("move").setFrames([[pos.x, pos.y, coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y]])
+            if (el.animation.get("move")) {
+                el.animation.get("move").run()
+                el.animation.get("move").setFrames([[pos.x, pos.y, coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y]])
+            } else
+            {
+                el.setPos(coord.x * el.getWidth() + coord.x * this.gap.x, coord.y * el.getHeight() + coord.y * this.gap.y)
+            }
+            
 
             if (x >= this.width * this.height) el.hide = true;
         });
+        this.emit("update", this)
     }
     draw ()
     {
@@ -68,8 +75,10 @@ export default class Layout extends Entity implements IMenu
     }
     push (items: IElement[])
     {
-
-        items.map((e) =>e.on("click", this.click))
+        items.map((e) => e.on("click", this.click))
+        while (this.elements.findIndex(e=>e == null) > -1 && items.length>0) {
+            this.elements[this.elements.findIndex(e => e == null)] = items.pop()
+        } 
         this.elements.push(...items)
         this.updateLayout()
         return this.elements.length
@@ -82,6 +91,9 @@ export default class Layout extends Entity implements IMenu
 
     move (target: Entity, to: Entity)
     {
+        if (target.animation.get("move")?.isRun) {
+            return
+        }
         const actionResult = target.action(to)
         if (actionResult)
         {
@@ -90,6 +102,7 @@ export default class Layout extends Entity implements IMenu
             this.elements[index].destroy()
             this.elements[index] = <IElement>target
             this.elements[playerIndex] = null
+            target.animation.get("move")?.setDuration(1000)
             this.updateLayout()
 
         } else

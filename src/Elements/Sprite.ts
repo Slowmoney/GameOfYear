@@ -26,7 +26,8 @@ export default class Sprite extends Entity implements IElement {
         this.aspecеRatio = image.height/image.width
         this.size = new vec2(this.width,this.height)
         Sprite.all.set(this.name, this);
-
+        this.click = this.click.bind(this);
+        this.engine.on('click', this.click);
     }
     draw ()
     {
@@ -47,9 +48,6 @@ export default class Sprite extends Entity implements IElement {
                 this.size = new vec2(frame[2], frame[3])
                 this.width = frame[2];
                 this.height = frame[3];
-
-                
-                
             }
         }
     }
@@ -60,5 +58,7 @@ export default class Sprite extends Entity implements IElement {
         this.frames.push(...frames);
         this.duration = duration;
     }
-
+    protected click(e: MouseEvent) {
+		if (this.engine.ctx.isPointInPath(this.collsionBox, e.offsetX, e.offsetY)) this.emit('click', this);
+	}
 }

@@ -1,4 +1,5 @@
-import Entity from "../Entity";
+import Entity from "../Entity.js";
+import { Formula } from "./Formula.js";
 
 
 export default class Anim
@@ -7,9 +8,10 @@ export default class Anim
     startStep: number = 0
     maxStep: number;
     protected loop: boolean = false
-    protected isRun = false
+    isRun = false
     protected frames: [prevX: number, prevY: number, toX: number, toY: number][] = []
     firstRun = false
+    timingFunc: (t:number) => number = Formula.linear
     constructor(maxStep: number)
     {
         this.maxStep = maxStep
@@ -27,10 +29,21 @@ export default class Anim
         this.isRun = true
         return false
     }
-    run ()
+    run (maxStep?: number)
     {
         if (this.isRun) return
         this.firstRun = true
         this.isRun = true
+        if (maxStep) {
+            this.maxStep = maxStep
+        }
+    }
+    setDuration (maxStep: number)
+    {
+        this.maxStep = maxStep
+    }
+    setTimingFunc (timingFunc:(t:number)=>number)
+    {
+        this.timingFunc = timingFunc
     }
 }
