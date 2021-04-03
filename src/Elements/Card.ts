@@ -125,7 +125,7 @@ export default class Card extends Entity implements IElement, IAnimated {
 			this.backGround.play(frames, 88);
 		}
 	}
-	anim(name: string, duration: number) {
+	anim(name: "move"|"popup", duration: number) {
 		this.animation.get(name).run();
 	}
 	protected click(e: MouseEvent) {

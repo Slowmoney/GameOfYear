@@ -23,7 +23,7 @@ export default class Entity extends EventEmmiter implements IAnimated
 
     time = 10
     duration = 100
-    animation = new Map<string, Anim>()
+    animation = new Map<"move"|"popup", Anim>()
     
     collsionBox: Path2D = new Path2D();
     constructor(engine: IEngine)
