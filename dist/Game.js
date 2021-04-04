@@ -1,5 +1,4 @@
 import { Formula } from './Animation/Formula.js';
-import Card from './Elements/Card.js';
 import Player from './Elements/Player.js';
 import Sprite from './Elements/Sprite.js';
 import { LevelGenerator } from './LevelGenerator.js';
@@ -59,21 +58,14 @@ export default class Game extends EventEmmiter {
     }
     main() {
         let lvlGen = LevelGenerator.gen(3);
+        const layout = this.getView('Layout');
         this.getView('Layout').on('start', (diffucaly) => {
             lvlGen = LevelGenerator.gen(diffucaly);
             this.getView('Layout').destroy();
-            const elemLayout = [
-                new Card(this.engine, this.getSize()),
-                new Card(this.engine, this.getSize()),
-                new Card(this.engine, this.getSize()),
-                new Player(this.engine, this.getSize()),
-                new Card(this.engine, this.getSize()),
-                new Card(this.engine, this.getSize()),
-                new Card(this.engine, this.getSize()),
-                new Card(this.engine, this.getSize()),
-                new Card(this.engine, this.getSize()),
-            ];
-            this.getView('Layout').push(elemLayout);
+            const elemLayout = Array(9).fill(null);
+            elemLayout[5] = new Player(this.engine, this.getSize());
+            /* this.getView('Layout').push(elemLayout); */
+            layout.emit("fill", elemLayout);
         });
         this.getView('Layout').on('update', (layout) => {
             if (!layout.elements.every(Boolean)) {
@@ -103,6 +95,29 @@ export default class Game extends EventEmmiter {
                     });
                 }
             }
+        });
+        layout.on("fill", (elements) => {
+            console.log("fill", elements);
+            let el = elements.find((e) => e && e.name == 'Player');
+            elements.map((e, i) => {
+                if (e == null) {
+                    const coord = Utils.indexToCoord(i, layout.getWidth());
+                    const newCard = lvlGen.next().value;
+                    if (newCard) {
+                        const card = new newCard(this.engine, this.getSize());
+                        card.setPos(coord.x * el.getWidth() + coord.x * layout.gap.x, coord.y * el.getHeight() + coord.y * layout.gap.y);
+                        card.scale.x = 0;
+                        card.scale.y = 0;
+                        card.anim('popup');
+                        card.animation.get('popup').setTimingFunc((t) => Formula.ease(t - 0.15));
+                        card.animation.get('popup').once('end', () => card.animation.get('popup').setDefault());
+                        layout.push([card]);
+                    }
+                }
+                else {
+                    layout.push([e]);
+                }
+            });
         });
         this.getView('Layout').emit("start", 0);
         requestAnimationFrame(this.update);

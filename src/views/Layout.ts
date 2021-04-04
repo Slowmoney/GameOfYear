@@ -75,7 +75,7 @@ export default class Layout extends Entity implements IMenu
     }
     push (items: IElement[])
     {
-        items.map((e) => e.on("click", this.click))
+        items.map((e) => e&&e.on("click", this.click))
         while (this.elements.findIndex(e=>e == null) > -1 && items.length>0) {
             this.elements[this.elements.findIndex(e => e == null)] = items.pop()
         } 
