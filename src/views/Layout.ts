@@ -112,7 +112,7 @@ export default class Layout extends Entity implements IMenu
             this.emit("toView","GameOver")
         }
     }
-    playAnim (animName: string)
+    playAnim (animName: "move" | "popup")
     {
 
         if (animName = "popup")

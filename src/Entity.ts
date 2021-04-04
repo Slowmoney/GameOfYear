@@ -74,10 +74,9 @@ export default class Entity extends EventEmmiter implements IAnimated
         console.log("destroy", this);
         
     }
-    anim (name: string, duration: number)
-    {
-        console.log(name, duration);
-    }
+    anim(name: "move"|"popup", duration?: number) {
+		this.animation.get(name).run(duration);
+	}
     updateCollisionBox ()
     {
         this.collsionBox = new Path2D();

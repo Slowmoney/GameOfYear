@@ -49,7 +49,7 @@ export default class Entity extends EventEmmiter {
         console.log("destroy", this);
     }
     anim(name, duration) {
-        console.log(name, duration);
+        this.animation.get(name).run(duration);
     }
     updateCollisionBox() {
         this.collsionBox = new Path2D();

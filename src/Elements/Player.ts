@@ -39,9 +39,26 @@ export default class Player extends Entity implements IElement, IAnimated {
 		if (!this.hide) {
 			//this.engine.ctx.scale(this.scale.x, this.scale.y)
 			//this.card.rect(this.x + this.offset.x, this.y + this.offset.y, this.width, this.height)
-			this.engine.ctx.stroke(this.card);
-
-			this.engine.ctx.beginPath();
+			
+            //centered translate
+			this.engine.ctx.translate(
+				this.translate.x +
+					this.width -
+					this.x * this.scale.x +
+					this.x -
+					(this.width * this.scale.x) / 2 -
+					this.width / 2,
+				this.translate.y +
+					this.height -
+					this.y * this.scale.y +
+					this.y -
+					(this.height * this.scale.y) / 2 -
+					this.height / 2
+			);
+            this.engine.ctx.scale(this.scale.x, this.scale.y);
+            this.engine.ctx.stroke(this.card);
+            
+            this.engine.ctx.beginPath();
 			const healthSprite = Sprite.all.get('health');
 			healthSprite.offset.x = 0;
 			healthSprite.offset.y = 0;
@@ -113,11 +130,8 @@ export default class Player extends Entity implements IElement, IAnimated {
 		if (!this.backGround) {
 		}
 	}
-	anim(name: string, duration: number) {
-		console.log(name, duration);
-		if (name == 'popup') {
-			this.animation;
-		}
+	anim(name: "move"|"popup", duration?: number) {
+		this.animation.get(name).run(duration);
 	}
 	protected click(e: MouseEvent) {
 		if (this.engine.ctx.isPointInPath(this.card, e.offsetX, e.offsetY)) this.emit('click', this);

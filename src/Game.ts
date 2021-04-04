@@ -121,9 +121,10 @@ export default class Game extends EventEmmiter {
             let el = elements.find((e) => e && e.name == 'Player');
             elements.map((e,i) =>
             {
+                const coord = Utils.indexToCoord(i, (<Layout>layout).getWidth());
                 if(e == null)
                 {
-                    const coord = Utils.indexToCoord(i, (<Layout>layout).getWidth());
+                   
                     const newCard = lvlGen.next().value;
                     if(newCard)
                     {
@@ -141,6 +142,15 @@ export default class Game extends EventEmmiter {
                     }
                 } else
                 {
+                    e.setPos(
+                        coord.x * el.getWidth() + coord.x * (<Layout>layout).gap.x,
+                        coord.y * el.getHeight() + coord.y * (<Layout>layout).gap.y
+                    );
+                    e.scale.x = 0;
+                    e.scale.y = 0;
+                    e.anim('popup', 500);
+                    e.animation.get('popup').setTimingFunc((t: number) => Formula.easeInOut(t - 0.15));
+                    e.animation.get('popup').once('end', () => e.animation.get('popup').setDefault());
                     layout.push([e]);
                 }
             })
