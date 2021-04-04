@@ -20,4 +20,8 @@ export namespace Formula
         bz.calc(p1x, p1y, p2x, p2y)
         return bz.solve(t, 0.000001)
     }
+    export function sin (t: number, f:(t: number)=>number, mul:number=10 )
+    {
+        return Math.sin(f(t) * Math.PI)/(mul) + 1
+    }
 }

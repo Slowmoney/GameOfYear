@@ -1,3 +1,4 @@
+import { Formula } from '../Animation/Formula.js';
 import Entity from '../Entity.js';
 import { IAnimated, IContainer, IElement, IEngine } from '../types';
 import vec2 from '../utils/vec2.js';
@@ -21,7 +22,8 @@ export default class Card extends Entity implements IElement, IAnimated {
 		}
 		this.loadBackGround();
 		this.click = this.click.bind(this);
-		this.engine.on('click', this.click);
+        this.engine.on('click', this.click);
+        /* this.animation.get("popup").setTimingFunc((t:number)=>Formula.cubicBezier(t,0.1, -0.6, 0.2, 0)) */
 	}
 	draw() {
 		this.engine.ctx.save();
@@ -125,8 +127,8 @@ export default class Card extends Entity implements IElement, IAnimated {
 			this.backGround.play(frames, 88);
 		}
 	}
-	anim(name: "move"|"popup", duration: number) {
-		this.animation.get(name).run();
+	anim(name: "move"|"popup", duration?: number) {
+		this.animation.get(name).run(duration);
 	}
 	protected click(e: MouseEvent) {
 		if (this.engine.ctx.isPointInPath(this.collsionBox, e.offsetX, e.offsetY)) this.emit('click', this);

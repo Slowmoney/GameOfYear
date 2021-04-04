@@ -125,9 +125,9 @@ export default class Layout extends Entity implements IMenu
                 new vec2(1, 0).add(playerCoord),
                 new vec2(0, 1).add(playerCoord),
                 new vec2(-1, 0).add(playerCoord),
-            ].filter(e => e.x >= 0 && e.y >= 0).map(e => Utils.coordToIndex(e.x, e.y, this.width))
-            console.log(fourCard);
-            fourCard.forEach(e => this.elements[e]&&this.elements[e].anim(animName, 10))
+            ].filter(e => e.x >= 0 && e.y >= 0 && e.x < this.width && e.y < this.height).map(e => Utils.coordToIndex(e.x, e.y, this.width))
+
+            fourCard.forEach(e => this.elements[e]&&this.elements[e].anim(animName, 500))
         }
     }
     destroy ()

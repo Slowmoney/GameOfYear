@@ -19,6 +19,7 @@ export default class Card extends Entity {
         this.loadBackGround();
         this.click = this.click.bind(this);
         this.engine.on('click', this.click);
+        /* this.animation.get("popup").setTimingFunc((t:number)=>Formula.cubicBezier(t,0.1, -0.6, 0.2, 0)) */
     }
     draw() {
         this.engine.ctx.save();
@@ -98,7 +99,7 @@ export default class Card extends Entity {
         }
     }
     anim(name, duration) {
-        this.animation.get(name).run();
+        this.animation.get(name).run(duration);
     }
     click(e) {
         if (this.engine.ctx.isPointInPath(this.collsionBox, e.offsetX, e.offsetY))

@@ -21,4 +21,8 @@ export var Formula;
         return bz.solve(t, 0.000001);
     }
     Formula.cubicBezier = cubicBezier;
+    function sin(t, f, mul = 10) {
+        return Math.sin(f(t) * Math.PI) / (mul) + 1;
+    }
+    Formula.sin = sin;
 })(Formula || (Formula = {}));

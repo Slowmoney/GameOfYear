@@ -7,6 +7,9 @@ export class Move extends Anim {
     render(entity, time) {
         if (!this.isRun)
             return true;
+        if (this.frames.every(f => f[0] == f[2] && f[1] == f[3])) {
+            this.setRun(false);
+        }
         if (this.firstRun) {
             this.step = time;
             this.firstRun = false;
@@ -17,7 +20,8 @@ export class Move extends Anim {
         if (time - this.step > this.maxStep) {
             if (this.isRun)
                 this.step = time;
-            this.isRun = false;
+            this.setRun(false);
+            this.emit("end", this);
         }
         return false;
     }

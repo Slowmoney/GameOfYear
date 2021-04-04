@@ -20,10 +20,21 @@ export default class EventEmmiter {
             __classPrivateFieldGet(this, _events).set(eventName, [listener]);
         return () => this.off(eventName, listener);
     }
+    once(eventName, listener) {
+        const func = (...args) => {
+            listener(args);
+            this.off(eventName, func);
+        };
+        if (__classPrivateFieldGet(this, _events).has(eventName))
+            __classPrivateFieldGet(this, _events).get(eventName).push(func);
+        else
+            __classPrivateFieldGet(this, _events).set(eventName, [func]);
+        return () => this.off(eventName, func);
+    }
     off(eventName, listener) {
         if (__classPrivateFieldGet(this, _events).has(eventName)) {
             const index = __classPrivateFieldGet(this, _events).get(eventName).indexOf(listener);
-            if (index > 0)
+            if (index > -1)
                 __classPrivateFieldGet(this, _events).get(eventName).splice(index, 1);
         }
     }

@@ -12,7 +12,11 @@ export class Move extends Anim
     }
     render (entity: Entity, time: number)
     {
-        if (!this.isRun) return true
+        if(!this.isRun) return true
+        if(this.frames.every(f=>f[0] == f[2] && f[1] == f[3]))
+        {
+            this.setRun(false)
+        }
         if (this.firstRun) {
             this.step = time
             this.firstRun = false
@@ -23,8 +27,9 @@ export class Move extends Anim
         entity.setPos(this.frames[0][0] + t * (this.frames[0][2] - this.frames[0][0]), this.frames[0][1] + t * (this.frames[0][3] - this.frames[0][1]))
         if (time - this.step > this.maxStep)
         {
-            if (this.isRun) this.step = time
-            this.isRun = false
+            if(this.isRun) this.step = time
+            this.setRun(false)
+            this.emit("end", this)
         }
         return false
     }

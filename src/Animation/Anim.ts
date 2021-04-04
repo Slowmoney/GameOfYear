@@ -1,8 +1,8 @@
 import Entity from "../Entity.js";
+import EventEmmiter from "../utils/eventEmmiter.js";
 import { Formula } from "./Formula.js";
 
-
-export default class Anim
+export default class Anim extends EventEmmiter
 {
     step = 0
     startStep: number = 0
@@ -11,9 +11,11 @@ export default class Anim
     isRun = false
     protected frames: [prevX: number, prevY: number, toX: number, toY: number][] = []
     firstRun = false
-    timingFunc: (t:number) => number = Formula.linear
+    protected readonly defaultTimingFunc: (t: number) => number = Formula.linear
+    protected timingFunc = this.defaultTimingFunc
     constructor(maxStep: number)
     {
+        super()
         this.maxStep = maxStep
         this.step = this.startStep
     }
@@ -26,17 +28,21 @@ export default class Anim
         entity;
         time;
         if (!this.isRun) return true
-        this.isRun = true
+        this.setRun(true)
         return false
     }
     run (maxStep?: number)
     {
         if (this.isRun) return
         this.firstRun = true
-        this.isRun = true
+        this.setRun(true)
         if (maxStep) {
             this.maxStep = maxStep
         }
+    }
+    protected setRun (value:boolean)
+    {
+        this.isRun = value
     }
     setDuration (maxStep: number)
     {
@@ -45,5 +51,9 @@ export default class Anim
     setTimingFunc (timingFunc:(t:number)=>number)
     {
         this.timingFunc = timingFunc
+    }
+    setDefault ()
+    {
+        this.timingFunc = this.defaultTimingFunc
     }
 }
