@@ -68,10 +68,10 @@ export default class Layout extends Entity implements IMenu
         const clickCoord = Utils.indexToCoord(index, this.width)
         const playerCoord = Utils.indexToCoord(playerIndex, this.width)
         const dir = clickCoord.sub(playerCoord)
-        if (!dir.x && !dir.y || dir.x > 1 || dir.y > 1 || dir.x == 1 && dir.y == 1 || dir.x == 1 && dir.y == -1 || dir.x == -1 && dir.y == -1 || dir.x == -1 && dir.y == 1) return this.playAnim("popup")
+        console.log(dir);
+        if (!(dir.y == -1&&dir.x==0||dir.x == -1&&dir.y == 0||dir.y == 1&&dir.x == 0||dir.x == 1&&dir.y == 0)) return this.playAnim("popup")
         const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)]
         this.move(player, attackTo)
-
     }
     push (items: IElement[])
     {
@@ -99,6 +99,8 @@ export default class Layout extends Entity implements IMenu
         {
             const index = this.elements.findIndex(p => p == to)
             const playerIndex = this.elements.findIndex(e => e == target)
+            console.log(index, playerIndex);
+            
             this.elements[index].destroy()
             this.elements[index] = <IElement>target
             this.elements[playerIndex] = null

@@ -52,7 +52,8 @@ export default class Layout extends Entity {
         const clickCoord = Utils.indexToCoord(index, this.width);
         const playerCoord = Utils.indexToCoord(playerIndex, this.width);
         const dir = clickCoord.sub(playerCoord);
-        if (!dir.x && !dir.y || dir.x > 1 || dir.y > 1 || dir.x == 1 && dir.y == 1 || dir.x == 1 && dir.y == -1 || dir.x == -1 && dir.y == -1 || dir.x == -1 && dir.y == 1)
+        console.log(dir);
+        if (!(dir.y == -1 && dir.x == 0 || dir.x == -1 && dir.y == 0 || dir.y == 1 && dir.x == 0 || dir.x == 1 && dir.y == 0))
             return this.playAnim("popup");
         const attackTo = this.elements[Utils.coordToIndex(playerCoord.x + dir.x, playerCoord.y + dir.y, this.width)];
         this.move(player, attackTo);
@@ -77,6 +78,7 @@ export default class Layout extends Entity {
         if (actionResult) {
             const index = this.elements.findIndex(p => p == to);
             const playerIndex = this.elements.findIndex(e => e == target);
+            console.log(index, playerIndex);
             this.elements[index].destroy();
             this.elements[index] = target;
             this.elements[playerIndex] = null;
