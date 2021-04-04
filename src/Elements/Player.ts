@@ -85,7 +85,7 @@ export default class Player extends Entity implements IElement, IAnimated {
 			);
 
 			const playerSprite = Sprite.all.get('poo');
-			playerSprite.setWidth(9 * 10 - 30);
+			playerSprite.setWidth(this.getWidth() - 30);
             playerSprite.setHeight(playerSprite.aspecеRatio * playerSprite.getWidth());
             playerSprite.setPos(this.x + (this.getWidth() - playerSprite.getWidth()) / 2, this.y + 30);
             playerSprite.draw();

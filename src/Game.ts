@@ -32,7 +32,8 @@ export default class Game extends EventEmmiter {
 			{ name: 'poo', url: './sprites/heroes/1598971053539.png' },
 			{ name: 'shield', url: './sprites/shield/Overall.png' },
 			{ name: 'swords', url: './sprites/sword.png' },
-			{ name: 'health', url: './sprites/health.png' },
+            { name: 'health', url: './sprites/health.png' },
+            { name: 'restart', url: './sprites/buttons/restart.png' },
 		];
 		this.changeView = this.changeView.bind(this);
 
@@ -46,6 +47,10 @@ export default class Game extends EventEmmiter {
 		this.update = this.update.bind(this);
         this.toView = this.toView.bind(this);
         this.on('toView', this.toView)
+
+        this.resize = this.resize.bind(this);
+        this.engine.on('resize', this.resize)
+
 		spriteLoader.load(this.spriteUrls).then((imgs) => {
 			console.log(
 				imgs.map((e) => {
@@ -68,22 +73,21 @@ export default class Game extends EventEmmiter {
 	}
 
 	main() {
-		let lvlGen = LevelGenerator.gen(3);
-        const cardSize = new vec2(9 * 10, 16 * 10);
-        
+        let lvlGen = LevelGenerator.gen(3);
+
 		this.getView('Layout').on('start', (diffucaly: number) => {
             lvlGen = LevelGenerator.gen(diffucaly);
             this.getView('Layout').destroy()
 			const elemLayout = [
-				new Card(this.engine, cardSize),
-				new Card(this.engine, cardSize),
-				new Card(this.engine, cardSize),
-				new Player(this.engine, cardSize),
-				new Card(this.engine, cardSize),
-				new Card(this.engine, cardSize),
-				new Card(this.engine, cardSize),
-				new Card(this.engine, cardSize),
-				new Card(this.engine, cardSize),
+				new Card(this.engine, this.getSize()),
+				new Card(this.engine, this.getSize()),
+				new Card(this.engine, this.getSize()),
+				new Player(this.engine, this.getSize()),
+				new Card(this.engine, this.getSize()),
+				new Card(this.engine, this.getSize()),
+				new Card(this.engine, this.getSize()),
+				new Card(this.engine, this.getSize()),
+				new Card(this.engine, this.getSize()),
 			];
 			this.getView('Layout').push(elemLayout);
 		});
@@ -101,7 +105,7 @@ export default class Game extends EventEmmiter {
 							const coord = Utils.indexToCoord(i, (<Layout>layout).getWidth());
 							const newCard = lvlGen.next().value;
 							if (newCard) {
-								const card = new newCard(this.engine, cardSize);
+								const card = new newCard(this.engine, this.getSize());
 								card.setPos(
 									coord.x * el.getWidth() + coord.x * (<Layout>layout).gap.x,
 									coord.y * el.getHeight() + coord.y * (<Layout>layout).gap.y
@@ -140,5 +144,22 @@ export default class Game extends EventEmmiter {
     }
 	getView(name: string) {
 		return this.views.find((e) => e.name == name);
-	}
+    }
+    resize ()
+    {
+        const size = this.getSize()
+        console.log(size);
+        this.getView('Layout').elements.forEach(e =>
+        {
+            e.setWidth(size.x)
+            e.setHeight(size.y)
+        })
+        this.getView('Layout').push([])
+        
+    }
+    getSize ()
+    {
+        const size = Math.floor(Math.min(this.engine.el.height/3/16,this.engine.el.width/3/9))-2
+        return new vec2(9 * size, 16 * size);
+    }
 }

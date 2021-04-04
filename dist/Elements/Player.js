@@ -60,7 +60,7 @@ export default class Player extends Entity {
             this.engine.ctx.textAlign = 'center';
             this.engine.ctx.fillText(this.armor + '', armorPos.x - shieldSprite.size.x / 2, armorPos.y + shieldSprite.size.y / 2 + 3);
             const playerSprite = Sprite.all.get('poo');
-            playerSprite.setWidth(9 * 10 - 30);
+            playerSprite.setWidth(this.getWidth() - 30);
             playerSprite.setHeight(playerSprite.aspecеRatio * playerSprite.getWidth());
             playerSprite.setPos(this.x + (this.getWidth() - playerSprite.getWidth()) / 2, this.y + 30);
             playerSprite.draw();

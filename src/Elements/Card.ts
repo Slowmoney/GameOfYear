@@ -105,6 +105,8 @@ export default class Card extends Entity implements IElement, IAnimated {
 	drawBackGround() {
 		this.updateCollisionBox()
 
+        this.backGround.setWidth(this.getWidth() / 3)
+        this.backGround.setHeight(this.backGround.aspecеRatio * this.backGround.getWidth());
 		this.backGround.setPos(
 			this.x + this.width / 2 - this.backGround.width / 2,
 			this.y + this.height / 2 - this.backGround.height / 2

@@ -8,5 +8,11 @@ export default class Engine extends EventEmmiter {
         this.el.height = height ? height : window.innerHeight;
         this.el.addEventListener("click", (ev) => this.emit("click", ev));
         this.el.addEventListener("mousemove", (ev) => this.emit("mousemove", ev));
+        window.addEventListener('resize', this.resize.bind(this));
+    }
+    resize() {
+        this.el.width = window.innerWidth;
+        this.el.height = window.innerHeight;
+        this.emit("resize");
     }
 }

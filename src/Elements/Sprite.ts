@@ -1,5 +1,5 @@
 import Entity from '../Entity.js';
-import { IContainer, IElement, IEngine } from '../types';
+import { IContainer, IElement, IEngine, SpriteName } from '../types';
 import vec2 from '../utils/vec2.js';
 
 export default class Sprite extends Entity implements IElement {
@@ -8,8 +8,8 @@ export default class Sprite extends Entity implements IElement {
     hide: boolean;
     width: number;
     height: number;
-    name: string;
-    static all = new Map<string, Sprite>();
+    name: SpriteName;
+    static all = new Map<SpriteName, Sprite>();
     frames: [sx: number, sy: number, w: number, h: number][] = [];
     duration: number = 1000;
     time: number = 0;
@@ -17,7 +17,7 @@ export default class Sprite extends Entity implements IElement {
     protected animated: boolean = false;
     size = new vec2(0,0)
     aspecеRatio: number;
-    constructor(engine: IEngine, name: string, image: ImageBitmap | HTMLImageElement) {
+    constructor(engine: IEngine, name: SpriteName, image: ImageBitmap | HTMLImageElement) {
         super(engine);
         this.image = image;
         this.name = name;

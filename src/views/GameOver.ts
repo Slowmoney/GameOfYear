@@ -19,8 +19,8 @@ export class GameOver extends EventEmmiter implements IMenu {
 	}
 	draw() {
 		this.engine.ctx.save();
-		/* this.engine.ctx.fillRect(0, 0, this.engine.el.width, this.engine.el.height) */
-		Sprite.all.get('health').draw();
+
+		Sprite.all.get('restart').draw();
 
 		this.engine.ctx.restore();
 	}
