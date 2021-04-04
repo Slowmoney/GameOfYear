@@ -37,6 +37,8 @@ export default class Game extends EventEmmiter {
             view.on('toView', this.changeView);
         });
         this.update = this.update.bind(this);
+        this.toView = this.toView.bind(this);
+        this.on('toView', this.toView);
         spriteLoader.load(this.spriteUrls).then((imgs) => {
             console.log(imgs.map((e) => {
                 return new Sprite(this.engine, e.name, e.img);
@@ -53,20 +55,24 @@ export default class Game extends EventEmmiter {
         requestAnimationFrame(this.update);
     }
     main() {
-        const lvlGen = LevelGenerator.gen(3);
+        let lvlGen = LevelGenerator.gen(3);
         const cardSize = new vec2(9 * 10, 16 * 10);
-        const elemLayout = [
-            new Card(this.engine, cardSize),
-            new Card(this.engine, cardSize),
-            new Card(this.engine, cardSize),
-            new Player(this.engine, cardSize),
-            new Card(this.engine, cardSize),
-            new Card(this.engine, cardSize),
-            new Card(this.engine, cardSize),
-            new Card(this.engine, cardSize),
-            new Card(this.engine, cardSize),
-        ];
-        this.getView('Layout').push(elemLayout);
+        this.getView('Layout').on('start', (diffucaly) => {
+            lvlGen = LevelGenerator.gen(diffucaly);
+            this.getView('Layout').destroy();
+            const elemLayout = [
+                new Card(this.engine, cardSize),
+                new Card(this.engine, cardSize),
+                new Card(this.engine, cardSize),
+                new Player(this.engine, cardSize),
+                new Card(this.engine, cardSize),
+                new Card(this.engine, cardSize),
+                new Card(this.engine, cardSize),
+                new Card(this.engine, cardSize),
+                new Card(this.engine, cardSize),
+            ];
+            this.getView('Layout').push(elemLayout);
+        });
         this.getView('Layout').on('update', (layout) => {
             if (!layout.elements.every(Boolean)) {
                 console.log('addd');
@@ -75,7 +81,7 @@ export default class Game extends EventEmmiter {
                         acc.push(i);
                     return acc;
                 }, []);
-                let el = layout.elements.find((e) => (e && e.name == 'Player'));
+                let el = layout.elements.find((e) => e && e.name == 'Player');
                 if (el) {
                     el.animation.get('move').once('end', (a) => {
                         nullable.forEach((i) => {
@@ -87,7 +93,7 @@ export default class Game extends EventEmmiter {
                                 card.scale.x = 0;
                                 card.scale.y = 0;
                                 card.anim('popup');
-                                card.animation.get('popup').setTimingFunc((t) => Formula.ease(t + 0.15));
+                                card.animation.get('popup').setTimingFunc((t) => Formula.ease(t - 0.15));
                                 card.animation.get('popup').once('end', () => card.animation.get('popup').setDefault());
                                 layout.push([card]);
                             }
@@ -96,6 +102,7 @@ export default class Game extends EventEmmiter {
                 }
             }
         });
+        this.getView('Layout').emit("start", 0);
         requestAnimationFrame(this.update);
     }
     changeView(name) {
@@ -105,6 +112,12 @@ export default class Game extends EventEmmiter {
         if (this.selectedViewIndex == -1) {
             this.selectedViewIndex = 0;
             console.error('NOT VIEW FOUND', name);
+        }
+        this.emit("toView", name);
+    }
+    toView(name) {
+        if (name == 'Layout') {
+            this.getView('Layout').emit("start", 0);
         }
     }
     getView(name) {

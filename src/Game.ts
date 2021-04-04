@@ -44,7 +44,8 @@ export default class Game extends EventEmmiter {
 		});
 
 		this.update = this.update.bind(this);
-
+        this.toView = this.toView.bind(this);
+        this.on('toView', this.toView)
 		spriteLoader.load(this.spriteUrls).then((imgs) => {
 			console.log(
 				imgs.map((e) => {
@@ -67,53 +68,57 @@ export default class Game extends EventEmmiter {
 	}
 
 	main() {
-		const lvlGen = LevelGenerator.gen(3);
-		const cardSize = new vec2(9 * 10, 16 * 10);
-		const elemLayout = [
-			new Card(this.engine, cardSize),
-			new Card(this.engine, cardSize),
-			new Card(this.engine, cardSize),
-			new Player(this.engine, cardSize),
-			new Card(this.engine, cardSize),
-			new Card(this.engine, cardSize),
-			new Card(this.engine, cardSize),
-			new Card(this.engine, cardSize),
-			new Card(this.engine, cardSize),
-		];
-		this.getView('Layout').push(elemLayout);
+		let lvlGen = LevelGenerator.gen(3);
+        const cardSize = new vec2(9 * 10, 16 * 10);
+        
+		this.getView('Layout').on('start', (diffucaly: number) => {
+            lvlGen = LevelGenerator.gen(diffucaly);
+            this.getView('Layout').destroy()
+			const elemLayout = [
+				new Card(this.engine, cardSize),
+				new Card(this.engine, cardSize),
+				new Card(this.engine, cardSize),
+				new Player(this.engine, cardSize),
+				new Card(this.engine, cardSize),
+				new Card(this.engine, cardSize),
+				new Card(this.engine, cardSize),
+				new Card(this.engine, cardSize),
+				new Card(this.engine, cardSize),
+			];
+			this.getView('Layout').push(elemLayout);
+		});
 		this.getView('Layout').on('update', (layout: IMenu) => {
 			if (!layout.elements.every(Boolean)) {
 				console.log('addd');
 				const nullable = layout.elements.reduce<number[]>((acc, c, i) => {
 					if (c == null) acc.push(i);
 					return acc;
-                }, []);
-                let el = layout.elements.find((e) => (e && e.name == 'Player'));
-                if(el)
-                {
-                    el.animation.get('move').once('end', (a) =>
-                    {
-                        nullable.forEach((i) =>
-                        {
-
-                            const coord = Utils.indexToCoord(i, (<Layout>layout).getWidth())
-                            const newCard = lvlGen.next().value;
-                            if(newCard)
-                            {
-                                const card = new newCard(this.engine, cardSize)
-                                card.setPos(coord.x * el.getWidth() + coord.x * (<Layout>layout).gap.x, coord.y * el.getHeight() + coord.y * (<Layout>layout).gap.y)
-                                card.scale.x = 0
-                                card.scale.y = 0
-                                card.anim('popup')
-                                card.animation.get('popup').setTimingFunc((t: number) => Formula.ease(t+0.15))
-                                card.animation.get('popup').once('end', () => card.animation.get('popup').setDefault())
-                                layout.push([card]);
-                            }
-                            });
-                    });
-                }
+				}, []);
+				let el = layout.elements.find((e) => e && e.name == 'Player');
+				if (el) {
+					el.animation.get('move').once('end', (a) => {
+						nullable.forEach((i) => {
+							const coord = Utils.indexToCoord(i, (<Layout>layout).getWidth());
+							const newCard = lvlGen.next().value;
+							if (newCard) {
+								const card = new newCard(this.engine, cardSize);
+								card.setPos(
+									coord.x * el.getWidth() + coord.x * (<Layout>layout).gap.x,
+									coord.y * el.getHeight() + coord.y * (<Layout>layout).gap.y
+								);
+								card.scale.x = 0;
+								card.scale.y = 0;
+								card.anim('popup');
+								card.animation.get('popup').setTimingFunc((t: number) => Formula.ease(t - 0.15));
+								card.animation.get('popup').once('end', () => card.animation.get('popup').setDefault());
+								layout.push([card]);
+							}
+						});
+					});
+				}
 			}
-		});
+        });
+        this.getView('Layout').emit("start",0)
 		requestAnimationFrame(this.update);
 	}
 
@@ -124,8 +129,15 @@ export default class Game extends EventEmmiter {
 		if (this.selectedViewIndex == -1) {
 			this.selectedViewIndex = 0;
 			console.error('NOT VIEW FOUND', name);
-		}
-	}
+        }
+        this.emit("toView",name)
+    }
+    toView (name: string)
+    {
+        if (name == 'Layout') {
+            this.getView('Layout').emit("start",0)
+        }
+    }
 	getView(name: string) {
 		return this.views.find((e) => e.name == name);
 	}
